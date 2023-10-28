@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import { MainMenu } from './components/MainMenu/MainMenu';
+import { ComponentsPalette } from './components/ComponentsPalette/ComponentsPalette';
+import { DrawArea } from './components/DrawArea/DrawArea';
 
-function App() {
+export function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='tc-App'>
+      <MainMenu></MainMenu>
+      <div className="tc-App-edit-area">
+        <ComponentsPalette></ComponentsPalette>
+        <DrawArea></DrawArea>
+      </div>
     </div>
+
+    // <div className="App">
+    //   <header className="App-header">
+    //     <img src={logo} className="App-logo" alt="logo" />
+    //     <p>
+    //       Edit <code>src/App.tsx</code> and save to reload.
+    //     </p>
+    //     <a
+    //       className="App-link"
+    //       href="https://reactjs.org"
+    //       target="_blank"
+    //       rel="noopener noreferrer"
+    //     >
+    //       Learn React
+    //     </a>
+    //   </header>
+    // </div>
   );
 }
 
-export default App;

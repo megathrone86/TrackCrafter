@@ -1,0 +1,15 @@
+.tc-App {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .tc-App-edit-area {
+    flex: auto 1 1;
+    display: flex;
+    flex-direction: row;
+
+    .tc-DrawArea {
+      flex: auto 1 1;
+    }
+  }
+}
