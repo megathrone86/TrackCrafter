@@ -1,0 +1,10 @@
+.tc-SidePanel {
+    padding: 3px;
+    border-right: 1px solid black;
+
+    >*:not(:first-child) {
+        padding: 3px 0;
+        border-top: 1px solid black;
+        margin-top: 10px;
+    }
+}
