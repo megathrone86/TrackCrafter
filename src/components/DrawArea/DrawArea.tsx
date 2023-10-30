@@ -67,14 +67,14 @@ export function DrawArea() {
         {columns.map((x) => (
           <div
             key={`v${x}`}
-            className="tc-DrawArea-grid-vertical-line"
+            className="tc-DrawArea-gridVerticalLine"
             style={{ left: `${x}px` }}
           ></div>
         ))}
         {rows.map((y) => (
           <div
             key={`h${y}`}
-            className="tc-DrawArea-grid-horizontal-line"
+            className="tc-DrawArea-gridHorizontalLine"
             style={{ top: `${y}px` }}
           ></div>
         ))}

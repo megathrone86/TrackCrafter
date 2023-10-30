@@ -3,14 +3,14 @@
     position: relative;
     overflow: hidden;
 
-    .tc-DrawArea-grid-vertical-line {
+    .tc-DrawArea-gridVerticalLine {
         position: absolute;
         top: 0;
         bottom: 0;
         border-right: 1px dotted #44aa44dd;
     }
     
-    .tc-DrawArea-grid-horizontal-line {
+    .tc-DrawArea-gridHorizontalLine {
         position: absolute;
         left: 0;
         right: 0;

@@ -15,7 +15,7 @@ export function SidePanel(props: IProps) {
 
   return (
     <div className="tc-SidePanel">
-      <div className="tc-SidePanel-top-settings">
+      <div className="tc-SidePanel-topSettings">
         <p>Размер сетки (в метрах)</p>
         <RadioButtons
           options={gridSizes}
@@ -24,7 +24,7 @@ export function SidePanel(props: IProps) {
           selectionChanged={(e) => dispatch(setGridSize(e))}
         ></RadioButtons>
       </div>
-      <div className="tc-SidePanel-components-palette">
+      <div className="tc-SidePanel-componentsPalette">
         <p>Создание компонентов</p>
         <div>Иконка красного конуса</div>
         <div>Иконка синего конуса</div>
