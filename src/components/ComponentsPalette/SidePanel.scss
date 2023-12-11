@@ -1,10 +1,20 @@
 .tc-SidePanel {
     padding: 3px;
     border-right: 1px solid black;
+    max-width: 200px;
 
     >*:not(:first-child) {
         padding: 3px 0;
         border-top: 1px solid black;
         margin-top: 10px;
+    }
+
+    .tc-SidePanel-componentsPalette {
+        .tc-SidePanel-componentsList {
+            display: flex;
+            column-gap: 5px;
+            row-gap: 5px;
+            flex-wrap: wrap;
+        }
     }
 }

@@ -2,16 +2,19 @@ import { useSelector } from "react-redux";
 import "./DrawArea.scss";
 import { IRootState } from "../../store/store";
 import { useEffect, useRef, useState } from "react";
-
-type Point = { x: number; y: number };
+import { BaseItem } from "./elements/BaseItem/BaseItem";
+import { CamPosition } from "../shared/CamPosition";
+import { Point } from "../shared/Point";
 
 const pixelsToMeterRatio = 100;
+
+//TODO: рассмотреть либу ReactFlow для отрисовки
 
 export function DrawArea() {
   const viewportRef = useRef(null);
   const [viewportSize, setSize] = useState<Point>({ x: 0, y: 0 });
 
-  const [camPos, setCamPos] = useState<Point>({ x: 0, y: 0 });
+  const [camPos, setCamPos] = useState<CamPosition>({ x: 0, y: 0 });
   const [mouseStartPos, setMouseStartPos] = useState<Point | null>(null);
 
   const gridSize = useSelector((state: IRootState) => state.gridSize)
@@ -51,6 +54,8 @@ export function DrawArea() {
     rows.push(y);
   }
 
+  const items = useSelector((state: IRootState) => state.items);
+
   return (
     <div
       className="tc-DrawArea"
@@ -81,14 +86,19 @@ export function DrawArea() {
       </div>
 
       <div className="tc-DrawArea-debugInfo">
-        <p>gridSize = {gridSize}</p>
+        <p>items = {items.length}</p>
+        {/* <p>gridSize = {gridSize}</p>
         <p>
           viewportSize = {viewportSize.x}, {viewportSize.y}
         </p>
         <p>
           cam: {camPos.x}, {camPos.y}
-        </p>
+        </p> */}
       </div>
+
+      {items.map((item, i) => (
+        <BaseItem key={i} model={item} camPos={camPos}></BaseItem>
+      ))}
     </div>
   );
 

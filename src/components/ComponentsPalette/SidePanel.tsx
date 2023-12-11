@@ -1,12 +1,17 @@
-import { RadioButtons } from "../shared/RadioButtons";
+import { RadioButtons } from "../shared/radioButtons/RadioButtons";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../store/store";
 import { setGridSize } from "../../store/actions";
 import { gridSizes } from "../../consts";
 
 import "./SidePanel.scss";
+import { Cone } from "./objects/Cone/Cone";
+import { ConeColor, ConeModel } from "../../models/ConeModel";
 
 interface IProps {}
+
+const redConeModel = new ConeModel(ConeColor.Red);
+const blueConeModel = new ConeModel(ConeColor.Blue);
 
 export function SidePanel(props: IProps) {
   const dispatch = useDispatch();
@@ -26,8 +31,11 @@ export function SidePanel(props: IProps) {
       </div>
       <div className="tc-SidePanel-componentsPalette">
         <p>Создание компонентов</p>
-        <div>Иконка красного конуса</div>
-        <div>Иконка синего конуса</div>
+
+        <div className="tc-SidePanel-componentsList">
+          <Cone title="Красный конус" prototypeModel={redConeModel}></Cone>
+          <Cone title="Синий конус" prototypeModel={blueConeModel}></Cone>
+        </div>
       </div>
       <div className="tc-SidePanel-tree">
         <p>Дерево объектов</p>

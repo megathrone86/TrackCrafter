@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./RadioButtons.scss";
-import { Option } from "./Option";
+import { Option } from "../Option";
 
 interface IProps {
   options: Option[];
