@@ -56,6 +56,13 @@ export function DrawArea() {
 
   const items = useSelector((state: IRootState) => state.items);
 
+  const helper = new GeometryHelper(
+    viewportSize,
+    camPos,
+    gridSize,
+    gridCellSize
+  );
+
   return (
     <div
       className="tc-DrawArea"
@@ -64,10 +71,6 @@ export function DrawArea() {
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <button onClick={test} style={{ zIndex: 999999 }}>
-        test
-      </button>
-
       <div className="tc-DrawArea-grid">
         {columns.map((x) => (
           <div
@@ -75,7 +78,7 @@ export function DrawArea() {
             className={getGridLineClassName(
               "tc-DrawArea-gridVerticalLine",
               "tc-DrawArea-gridVerticalLine_major",
-              screenXToWorld(x)
+              helper.screenXToWorld(x)
             )}
             style={{ left: `${x}px` }}
           ></div>
@@ -86,7 +89,7 @@ export function DrawArea() {
             className={getGridLineClassName(
               "tc-DrawArea-gridHorizontalLine",
               "tc-DrawArea-gridHorizontalLine_major",
-              screenYToWorld(y)
+              helper.screenYToWorld(y)
             )}
             style={{ top: `${y}px` }}
           ></div>
@@ -94,14 +97,7 @@ export function DrawArea() {
       </div>
 
       <div className="tc-DrawArea-debugInfo">
-        <p>items = {items.length}</p>
-        {/* <p>gridSize = {gridSize}</p>
-        <p>
-          viewportSize = {viewportSize.x}, {viewportSize.y}
-        </p>
-        <p>
-          cam: {camPos.x}, {camPos.y}
-        </p> */}
+        {/* <p>items = {items.length}</p> */}
       </div>
 
       {items.map((item, i) => (
@@ -110,24 +106,12 @@ export function DrawArea() {
     </div>
   );
 
-  function screenXToWorld(screenX: number) {
-    const ret = (screenX + camPos.x) / pixelsToMeterRatio;
-    return ret;
-  }
-  function screenYToWorld(screenY: number) {
-    return (screenY + camPos.y) / pixelsToMeterRatio;
-  }
-
   function getGridLineClassName(
     class1: string,
     class2: string,
     coordinate: number
   ) {
-    if (Number.isInteger(coordinate)) {
-      return `${class1} ${class2}`;
-    } else {
-      return class1;
-    }
+    return Number.isInteger(coordinate) ? `${class1} ${class2}` : class1;
   }
 
   function handlePointerDown(e: React.PointerEvent) {
@@ -159,6 +143,21 @@ export function DrawArea() {
   function handlePointerUp(e: React.PointerEvent) {
     handlePointerMove(e, true);
   }
+}
 
-  function test() {}
+export class GeometryHelper {
+  constructor(
+    public viewportSize: Point,
+    public camPos: CamPosition,
+    public gridSize: number,
+    public gridCellSize: number
+  ) {}
+
+  public screenXToWorld(screenX: number) {
+    const ret = (screenX + this.camPos.x) / pixelsToMeterRatio;
+    return ret;
+  }
+  public screenYToWorld(screenY: number) {
+    return (screenY + this.camPos.y) / pixelsToMeterRatio;
+  }
 }
