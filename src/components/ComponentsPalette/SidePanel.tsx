@@ -6,12 +6,12 @@ import { gridSizes } from "../../consts";
 
 import "./SidePanel.scss";
 import { Cone } from "./objects/Cone/Cone";
-import { ConeColor, ConeModel } from "../../models/ConeModel";
+import { ConeColor, createConeModel } from "../../models/ConeModel";
 
 interface IProps {}
 
-const redConeModel = new ConeModel(ConeColor.Red);
-const blueConeModel = new ConeModel(ConeColor.Blue);
+const redConeModel = createConeModel(ConeColor.Red);
+const blueConeModel = createConeModel(ConeColor.Blue);
 
 export function SidePanel(props: IProps) {
   const dispatch = useDispatch();

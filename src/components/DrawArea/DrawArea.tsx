@@ -72,14 +72,22 @@ export function DrawArea() {
         {columns.map((x) => (
           <div
             key={`v${x}`}
-            className="tc-DrawArea-gridVerticalLine"
+            className={getGridLineClassName(
+              "tc-DrawArea-gridVerticalLine",
+              "tc-DrawArea-gridVerticalLine_major",
+              screenXToWorld(x)
+            )}
             style={{ left: `${x}px` }}
           ></div>
         ))}
         {rows.map((y) => (
           <div
             key={`h${y}`}
-            className="tc-DrawArea-gridHorizontalLine"
+            className={getGridLineClassName(
+              "tc-DrawArea-gridHorizontalLine",
+              "tc-DrawArea-gridHorizontalLine_major",
+              screenYToWorld(y)
+            )}
             style={{ top: `${y}px` }}
           ></div>
         ))}
@@ -101,6 +109,26 @@ export function DrawArea() {
       ))}
     </div>
   );
+
+  function screenXToWorld(screenX: number) {
+    const ret = (screenX + camPos.x) / pixelsToMeterRatio;
+    return ret;
+  }
+  function screenYToWorld(screenY: number) {
+    return (screenY + camPos.y) / pixelsToMeterRatio;
+  }
+
+  function getGridLineClassName(
+    class1: string,
+    class2: string,
+    coordinate: number
+  ) {
+    if (Number.isInteger(coordinate)) {
+      return `${class1} ${class2}`;
+    } else {
+      return class1;
+    }
+  }
 
   function handlePointerDown(e: React.PointerEvent) {
     if (viewportRef.current) {

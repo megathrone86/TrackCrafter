@@ -6,19 +6,18 @@ export enum ConeColor {
   Yellow = "Yellow",
 }
 
-export class ConeModel extends TrackElementModel {
-  public get type(): TrackElementType {
-    return TrackElementType.Cone;
-  }
-
-  x: number = 0;
-  y: number = 0;
+export interface ConeModel extends TrackElementModel {
+  x: number;
+  y: number;
 
   color: ConeColor;
+}
 
-  constructor(color: ConeColor) {
-    super();
-
-    this.color = color;
-  }
+export function createConeModel(color: ConeColor): ConeModel {
+  return {
+    type: TrackElementType.Cone,
+    color,
+    x: 0,
+    y: 0,
+  };
 }

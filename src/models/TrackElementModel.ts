@@ -3,7 +3,6 @@ export enum TrackElementType {
   Cone = "Cone",
 }
 
-export abstract class TrackElementModel {
-  public abstract get type(): TrackElementType;
-  //   public type = TrackElementType.Unknown;
+export interface TrackElementModel {
+  type: TrackElementType;
 }

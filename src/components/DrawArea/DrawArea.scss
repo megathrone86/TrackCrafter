@@ -7,14 +7,22 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        border-right: 1px dotted #44aa44dd;
+        border-right: 1px dashed #2cc92c88;
     }
-    
+
+    .tc-DrawArea-gridVerticalLine_major {
+        border-right: 2px dotted #44aa44dd;
+    }
+
     .tc-DrawArea-gridHorizontalLine {
         position: absolute;
         left: 0;
         right: 0;
-        border-bottom: 1px dotted #44aa44dd;
+        border-bottom: 1px dashed #2cc92c88;
+    }
+
+    .tc-DrawArea-gridHorizontalLine_major {
+        border-bottom: 2px dotted #44aa44dd;
     }
 
     .tc-DrawArea-debugInfo {
