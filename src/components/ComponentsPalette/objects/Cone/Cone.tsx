@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import "./Cone.scss";
-import { ConeModel } from "../../../../models/ConeModel";
+import { ConeModel, createConeModel } from "../../../../models/ConeModel";
 import { GetConeColor } from "../../../DrawArea/elements/Cone/Cone";
+import { useDispatch, useSelector } from "react-redux";
+import { PaletteDragHelper } from "../palette-drag-helper";
+import { IRootState } from "../../../../store/store";
 
 interface IProps {
   title: string;
@@ -9,40 +12,23 @@ interface IProps {
 }
 
 export function Cone(props: IProps) {
-  // const [selection, setSelection] = useState<Option | null>(
-  //   props.selection || null
-  // );
+  const dispatch = useDispatch();
+
+  const [dragHelper] = useState(
+    new PaletteDragHelper(dispatch, () =>
+      createConeModel(props.prototypeModel.color)
+    )
+  );
 
   return (
     <div className="tc-Palette-Cone">
       <div
         className="tc-Palette-Cone-circle"
         style={{ background: GetConeColor(props.prototypeModel) }}
+        onPointerDown={(e) => dragHelper.onPointerDown(e)}
+        onPointerMove={(e) => dragHelper.onPointerMove(e)}
+        onPointerUp={(e) => dragHelper.onPointerUp(e)}
       ></div>
-      {/* {props.options.map((o) => (
-        <div
-          key={o.key}
-          className={getOptionClass(o)}
-          onClick={() => onOptionClick(o)}
-        >
-          <label>{o.text}</label>
-        </div>
-      ))} */}
     </div>
   );
-
-  // function onOptionClick(o: Option) {
-  //   if (o !== selection) {
-  //     setSelection(o);
-  //     props.selectionChanged(o);
-  //   } else if (props.allowDeselect) {
-  //     setSelection(null);
-  //   }
-  // }
-
-  // function getOptionClass(o: Option) {
-  //   return o === selection
-  //     ? "tc-RadioButtons-option tc-RadioButtons-selected"
-  //     : "tc-RadioButtons-option";
-  // }
 }
