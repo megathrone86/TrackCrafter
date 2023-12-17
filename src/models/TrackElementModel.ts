@@ -1,8 +1,11 @@
+import { Point } from "../components/shared/Point";
+
 export enum TrackElementType {
   Unknown = "",
   Cone = "Cone",
 }
 
-export interface TrackElementModel {
+export interface TrackElementModel extends Point {
+  //тип элемента
   type: TrackElementType;
 }

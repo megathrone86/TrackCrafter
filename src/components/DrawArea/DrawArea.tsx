@@ -6,6 +6,7 @@ import { BaseItem } from "./elements/BaseItem/BaseItem";
 import { CamPosition } from "../shared/CamPosition";
 import { Point } from "../shared/Point";
 
+export const drawAreaClass = "tc-DrawArea";
 const pixelsToMeterRatio = 100;
 
 //TODO: рассмотреть либу ReactFlow для отрисовки
@@ -55,6 +56,7 @@ export function DrawArea() {
   }
 
   const items = useSelector((state: IRootState) => state.items);
+  const addingItem = useSelector((state: IRootState) => state.addingItem);
 
   const helper = new GeometryHelper(
     viewportSize,
@@ -65,7 +67,7 @@ export function DrawArea() {
 
   return (
     <div
-      className="tc-DrawArea"
+      className={drawAreaClass}
       ref={viewportRef}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -103,6 +105,10 @@ export function DrawArea() {
       {items.map((item, i) => (
         <BaseItem key={i} model={item} camPos={camPos}></BaseItem>
       ))}
+
+      {addingItem && !addingItem.screenPos && (
+        <BaseItem model={addingItem.model} camPos={camPos}></BaseItem>
+      )}
     </div>
   );
 

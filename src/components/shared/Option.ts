@@ -1,15 +1,17 @@
 import { Key } from "react";
 
-export interface Option {
+export interface Option<T> {
   key: Key;
-  value: unknown;
+  value: T;
   text: string;
 }
 
-export function getOptionFromString(value: string): Option {
-  return { key: value, text: value, value };
+export interface BaseOption extends Option<unknown> {}
+
+export function getOptionFromString<T>(value: T): Option<T> {
+  return { key: `${value}`, text: `${value}`, value };
 }
 
-export function getOptionFromNumber(value: number): Option {
-  return { key: value, text: value.toString(), value };
+export function getOptionFromNumber<T>(value: T): Option<T> {
+  return { key: `${value}`, text: `${value}`, value };
 }

@@ -18,7 +18,7 @@ export function App() {
         <DrawArea></DrawArea>
       </div>
 
-      {addingItem && !addingItem.isOnTrack && (
+      {addingItem && addingItem.screenPos && (
         <div className="tc-App-addingItemContainer" style={getStyle()}>
           <BaseItem model={addingItem.model} camPos={{ x: 0, y: 0 }}></BaseItem>
         </div>
@@ -27,7 +27,7 @@ export function App() {
   );
 
   function getStyle(): CSSProperties {
-    return addingItem
+    return addingItem && addingItem.screenPos
       ? {
           left: `${addingItem.screenPos.x}px`,
           top: `${addingItem.screenPos.y}px`,

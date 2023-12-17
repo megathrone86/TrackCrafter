@@ -7,9 +7,6 @@ export enum ConeColor {
 }
 
 export interface ConeModel extends TrackElementModel {
-  x: number;
-  y: number;
-
   color: ConeColor;
 }
 
