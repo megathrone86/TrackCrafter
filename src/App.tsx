@@ -20,7 +20,7 @@ export function App() {
 
       {addingItem && addingItem.screenPos && (
         <div className="tc-App-addingItemContainer" style={getStyle()}>
-          <BaseItem model={addingItem.model} camPos={{ x: 0, y: 0 }}></BaseItem>
+          <BaseItem model={addingItem.model}></BaseItem>
         </div>
       )}
     </div>

@@ -8,6 +8,9 @@ import {
 } from "../../../store/actions";
 import { TrackElementModel } from "../../../models/TrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
+import { GeometryHelper } from "../../DrawArea/GeometryHelper";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../../store/store";
 
 const dragStartDistance = 5;
 
@@ -75,6 +78,9 @@ export class PaletteDragHelper {
         e.clientY >= rect.top &&
         e.clientY <= rect.bottom
       ) {
+        // const camPos = useSelector((state: IRootState) => state.camPos);
+        // const helper = new GeometryHelper(viewportSize, camPos, gridSize);
+
         this.dispatch(setAddingItemMapPosition({ x: 1, y: 2 }));
         return;
       }

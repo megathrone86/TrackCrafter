@@ -1,69 +1,40 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./DrawArea.scss";
 import { IRootState } from "../../store/store";
 import { useEffect, useRef, useState } from "react";
 import { BaseItem } from "./elements/BaseItem/BaseItem";
-import { CamPosition } from "../shared/CamPosition";
 import { Point } from "../shared/Point";
+import { setCamPos } from "../../store/actions";
+import { GeometryHelper } from "./GeometryHelper";
 
 export const drawAreaClass = "tc-DrawArea";
-const pixelsToMeterRatio = 100;
+export const pixelsToMeterRatio = 100;
 
 //TODO: рассмотреть либу ReactFlow для отрисовки
 
 export function DrawArea() {
-  const viewportRef = useRef(null);
-  const [viewportSize, setSize] = useState<Point>({ x: 0, y: 0 });
+  const dispatch = useDispatch();
 
-  const [camPos, setCamPos] = useState<CamPosition>({ x: 0, y: 0 });
+  const viewportRef = useRef(null);
+  const [viewportSize, setViewportSize] = useState<Point>({ x: 0, y: 0 });
+
   const [mouseStartPos, setMouseStartPos] = useState<Point | null>(null);
 
-  const gridSize = useSelector((state: IRootState) => state.gridSize)
-    .value as number;
+  const gridSize = useSelector((state: IRootState) => state.gridSize).value;
+  const items = useSelector((state: IRootState) => state.items);
+  const addingItem = useSelector((state: IRootState) => state.addingItem);
+  const camPos = useSelector((state: IRootState) => state.camPos);
 
   useEffect(() => {
     if (viewportRef.current) {
       const div = viewportRef.current as HTMLDivElement;
-      setSize({ x: div.offsetWidth, y: div.offsetHeight });
+      setViewportSize({ x: div.offsetWidth, y: div.offsetHeight });
     }
   }, []);
 
-  const gridCellSize = pixelsToMeterRatio * gridSize;
-  const gridColumnsStart =
-    Math.trunc(camPos.x / gridCellSize) * gridCellSize -
-    gridCellSize -
-    camPos.x;
-  const gridColumnsEnd =
-    Math.trunc((viewportSize.x + camPos.x) / gridCellSize) * gridCellSize +
-    gridCellSize -
-    camPos.x;
-  const gridRowsStart =
-    Math.trunc(camPos.y / gridCellSize) * gridCellSize -
-    gridCellSize -
-    camPos.y;
-  const gridRowsEnd =
-    Math.trunc((viewportSize.y + camPos.y) / gridCellSize) * gridCellSize +
-    gridCellSize -
-    camPos.y;
+  const helper = new GeometryHelper(viewportSize, camPos, gridSize);
 
-  const columns = [];
-  for (let x = gridColumnsStart; x <= gridColumnsEnd; x += gridCellSize) {
-    columns.push(x);
-  }
-  const rows = [];
-  for (let y = gridRowsStart; y <= gridRowsEnd; y += gridCellSize) {
-    rows.push(y);
-  }
-
-  const items = useSelector((state: IRootState) => state.items);
-  const addingItem = useSelector((state: IRootState) => state.addingItem);
-
-  const helper = new GeometryHelper(
-    viewportSize,
-    camPos,
-    gridSize,
-    gridCellSize
-  );
+  const { columns, rows } = getGrid(helper);
 
   return (
     <div
@@ -103,11 +74,11 @@ export function DrawArea() {
       </div>
 
       {items.map((item, i) => (
-        <BaseItem key={i} model={item} camPos={camPos}></BaseItem>
+        <BaseItem key={i} model={item}></BaseItem>
       ))}
 
       {addingItem && !addingItem.screenPos && (
-        <BaseItem model={addingItem.model} camPos={camPos}></BaseItem>
+        <BaseItem model={addingItem.model}></BaseItem>
       )}
     </div>
   );
@@ -136,7 +107,7 @@ export function DrawArea() {
       };
       setMouseStartPos({ x: e.screenX, y: e.screenY });
 
-      setCamPos({ x: camPos.x - delta.x, y: camPos.y - delta.y });
+      dispatch(setCamPos({ x: camPos.x - delta.x, y: camPos.y - delta.y }));
 
       if (release && viewportRef.current) {
         const element = viewportRef.current as HTMLDivElement;
@@ -149,21 +120,35 @@ export function DrawArea() {
   function handlePointerUp(e: React.PointerEvent) {
     handlePointerMove(e, true);
   }
-}
 
-export class GeometryHelper {
-  constructor(
-    public viewportSize: Point,
-    public camPos: CamPosition,
-    public gridSize: number,
-    public gridCellSize: number
-  ) {}
+  function getGrid(geometryHelper: GeometryHelper) {
+    const gridCellSize = geometryHelper.getGridCellSize();
+    const gridColumnsStart =
+      Math.trunc(camPos.x / gridCellSize) * gridCellSize -
+      gridCellSize -
+      camPos.x;
+    const gridColumnsEnd =
+      Math.trunc((viewportSize.x + camPos.x) / gridCellSize) * gridCellSize +
+      gridCellSize -
+      camPos.x;
+    const gridRowsStart =
+      Math.trunc(camPos.y / gridCellSize) * gridCellSize -
+      gridCellSize -
+      camPos.y;
+    const gridRowsEnd =
+      Math.trunc((viewportSize.y + camPos.y) / gridCellSize) * gridCellSize +
+      gridCellSize -
+      camPos.y;
 
-  public screenXToWorld(screenX: number) {
-    const ret = (screenX + this.camPos.x) / pixelsToMeterRatio;
-    return ret;
-  }
-  public screenYToWorld(screenY: number) {
-    return (screenY + this.camPos.y) / pixelsToMeterRatio;
+    const columns = [];
+    for (let x = gridColumnsStart; x <= gridColumnsEnd; x += gridCellSize) {
+      columns.push(x);
+    }
+    const rows = [];
+    for (let y = gridRowsStart; y <= gridRowsEnd; y += gridCellSize) {
+      rows.push(y);
+    }
+
+    return { columns, rows };
   }
 }
