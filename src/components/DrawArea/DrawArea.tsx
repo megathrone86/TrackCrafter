@@ -18,6 +18,7 @@ export function DrawArea() {
   const viewportRef = useRef(null);
   const [viewportSize, setViewportSize] = useState<Point>({ x: 0, y: 0 });
 
+  const [camStartPos, setCamStartPos] = useState<Point | null>(null);
   const [mouseStartPos, setMouseStartPos] = useState<Point | null>(null);
 
   const gridSize = useSelector((state: IRootState) => state.gridSize).value;
@@ -70,6 +71,7 @@ export function DrawArea() {
       </div>
 
       <div className="tc-DrawArea-debugInfo">
+        <p>camPos.y = {camPos.y}</p>
         {/* <p>items = {items.length}</p> */}
       </div>
 
@@ -93,21 +95,23 @@ export function DrawArea() {
 
   function handlePointerDown(e: React.PointerEvent) {
     if (viewportRef.current) {
-      setMouseStartPos({ x: e.screenX, y: e.screenY });
+      setCamStartPos(camPos);
+      setMouseStartPos({ x: e.clientX, y: e.clientY });
       const element = viewportRef.current as HTMLDivElement;
       element.setPointerCapture(e.pointerId);
     }
   }
 
   function handlePointerMove(e: React.PointerEvent, release?: boolean) {
-    if (mouseStartPos) {
+    if (mouseStartPos && camStartPos) {
       const delta = {
-        x: e.screenX - mouseStartPos.x,
-        y: e.screenY - mouseStartPos.y,
+        x: e.clientX - mouseStartPos.x,
+        y: e.clientY - mouseStartPos.y,
       };
-      setMouseStartPos({ x: e.screenX, y: e.screenY });
 
-      dispatch(setCamPos({ x: camPos.x - delta.x, y: camPos.y - delta.y }));
+      dispatch(
+        setCamPos({ x: camStartPos.x - delta.x, y: camStartPos.y - delta.y })
+      );
 
       if (release && viewportRef.current) {
         const element = viewportRef.current as HTMLDivElement;
