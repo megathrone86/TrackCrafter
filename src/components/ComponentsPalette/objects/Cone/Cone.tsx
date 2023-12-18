@@ -1,10 +1,9 @@
-import { CSSProperties, useState } from "react";
+import { useState } from "react";
 import "./Cone.scss";
 import { ConeModel, createConeModel } from "../../../../models/ConeModel";
 import { GetConeColor } from "../../../DrawArea/elements/Cone/Cone";
 import { useDispatch, useSelector } from "react-redux";
-import { PaletteDragHelper } from "../palette-drag-helper";
-import { IRootState } from "../../../../store/store";
+import { PaletteDragHelper } from "../PaletteDragHelper";
 
 interface IProps {
   title: string;

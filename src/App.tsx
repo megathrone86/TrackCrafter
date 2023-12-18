@@ -8,7 +8,7 @@ import { BaseItem } from "./components/DrawArea/elements/BaseItem/BaseItem";
 import { CSSProperties } from "react";
 
 export function App() {
-  const addingItem = useSelector((state: IRootState) => state.addingItem);
+  const addingItem = useSelector((state: IRootState) => state.track.addingItem);
 
   return (
     <div className="tc-App">

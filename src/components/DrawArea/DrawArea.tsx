@@ -21,8 +21,8 @@ export function DrawArea() {
   const [mouseStartPos, setMouseStartPos] = useState<Point | null>(null);
 
   const gridSize = useSelector((state: IRootState) => state.gridSize).value;
-  const items = useSelector((state: IRootState) => state.items);
-  const addingItem = useSelector((state: IRootState) => state.addingItem);
+  const items = useSelector((state: IRootState) => state.track.items);
+  const addingItem = useSelector((state: IRootState) => state.track.addingItem);
   const camPos = useSelector((state: IRootState) => state.camPos);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export function DrawArea() {
     }
   }, []);
 
-  const helper = new GeometryHelper(viewportSize, camPos, gridSize);
+  const helper = new GeometryHelper(camPos, gridSize);
 
   const { columns, rows } = getGrid(helper);
 

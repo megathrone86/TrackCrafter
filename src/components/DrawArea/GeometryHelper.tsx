@@ -1,23 +1,23 @@
 import { CamPosition } from "../../store/store";
-import { Point } from "../shared/Point";
 import { pixelsToMeterRatio } from "./DrawArea";
 
 export class GeometryHelper {
-  constructor(
-    public viewportSize: Point,
-    public camPos: CamPosition,
-    public gridSize: number
-  ) {}
+  constructor(public camPos: CamPosition, public gridSize: number) {}
 
   public getGridCellSize() {
     return pixelsToMeterRatio * this.gridSize;
   }
 
-  public screenXToWorld(screenX: number) {
+  public screenXToWorld(screenX: number, roundToGrid = false) {
     const ret = (screenX + this.camPos.x) / pixelsToMeterRatio;
-    return ret;
+    return roundToGrid ? this.roundCoordinateToGrid(ret) : ret;
   }
-  public screenYToWorld(screenY: number) {
-    return (screenY + this.camPos.y) / pixelsToMeterRatio;
+  public screenYToWorld(screenY: number, roundToGrid = false) {
+    const ret = (screenY + this.camPos.y) / pixelsToMeterRatio;
+    return roundToGrid ? this.roundCoordinateToGrid(ret) : ret;
+  }
+
+  public roundCoordinateToGrid(coordinate: number) {
+    return Math.round(coordinate / this.gridSize) * this.gridSize;
   }
 }

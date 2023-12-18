@@ -2,6 +2,7 @@ import { Dispatch } from "react";
 import { AnyAction } from "redux";
 import { Point } from "../../shared/Point";
 import {
+  addItem,
   setAddingItem,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
@@ -9,8 +10,7 @@ import {
 import { TrackElementModel } from "../../../models/TrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
 import { GeometryHelper } from "../../DrawArea/GeometryHelper";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../../store/store";
+import { store } from "../../../store/store";
 
 const dragStartDistance = 5;
 
@@ -78,10 +78,13 @@ export class PaletteDragHelper {
         e.clientY >= rect.top &&
         e.clientY <= rect.bottom
       ) {
-        // const camPos = useSelector((state: IRootState) => state.camPos);
-        // const helper = new GeometryHelper(viewportSize, camPos, gridSize);
+        const camPos = store.getState().camPos;
+        const gridSize = store.getState().gridSize.value;
+        const helper = new GeometryHelper(camPos, gridSize);
 
-        this.dispatch(setAddingItemMapPosition({ x: 1, y: 2 }));
+        const x = helper.screenXToWorld(e.clientX - rect.left, true);
+        const y = helper.screenYToWorld(e.clientY - rect.top, true);
+        this.dispatch(setAddingItemMapPosition({ x, y }));
         return;
       }
     }
@@ -91,9 +94,10 @@ export class PaletteDragHelper {
   }
 
   public endDragging() {
+    this.dispatch(addItem());
+    this.dispatch(setAddingItem(null));
+
     this.drawArea = null;
     this.draggingStarted = false;
-
-    this.dispatch(setAddingItem(null));
   }
 }

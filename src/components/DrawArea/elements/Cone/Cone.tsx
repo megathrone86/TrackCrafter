@@ -3,6 +3,7 @@ import "./Cone.scss";
 import { ITrackElementProps } from "../IModelProps";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../../../store/store";
+import { pixelsToMeterRatio } from "../../DrawArea";
 
 export function Cone(props: ITrackElementProps<ConeModel>) {
   const camPos = useSelector((state: IRootState) => state.camPos);
@@ -18,8 +19,8 @@ export function Cone(props: ITrackElementProps<ConeModel>) {
 
   function getStyle() {
     return {
-      left: props.model.x - camPos.x + "px",
-      top: props.model.y - camPos.y + "px",
+      left: props.model.x * pixelsToMeterRatio - camPos.x + "px",
+      top: props.model.y * pixelsToMeterRatio - camPos.y + "px",
     };
   }
 }
