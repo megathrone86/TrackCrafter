@@ -6,6 +6,7 @@ import { IRootState } from "../../../../store/store";
 import { pixelsToMeterRatio } from "../../DrawArea";
 
 export function Cone(props: ITrackElementProps<ConeModel>) {
+  const addingItem = useSelector((state: IRootState) => state.track.addingItem);
   const camPos = useSelector((state: IRootState) => state.camPos);
 
   return (
@@ -18,10 +19,14 @@ export function Cone(props: ITrackElementProps<ConeModel>) {
   );
 
   function getStyle() {
-    return {
-      left: props.model.x * pixelsToMeterRatio - camPos.x + "px",
-      top: props.model.y * pixelsToMeterRatio - camPos.y + "px",
-    };
+    const isScreenPositioned =
+      addingItem?.screenPos && props.model === addingItem.model;
+    if (!isScreenPositioned) {
+      return {
+        left: props.model.x * pixelsToMeterRatio - camPos.x + "px",
+        top: props.model.y * pixelsToMeterRatio - camPos.y + "px",
+      };
+    }
   }
 }
 
