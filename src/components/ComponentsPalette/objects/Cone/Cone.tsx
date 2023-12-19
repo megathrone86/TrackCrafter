@@ -25,8 +25,8 @@ export function Cone(props: IProps) {
         className="tc-Palette-Cone-circle"
         style={{ background: GetConeColor(props.prototypeModel) }}
         onPointerDown={(e) => dragHelper.handlePointerDown(e)}
-        onPointerMove={(e) => dragHelper.handlePointerMove(e)}
-        onPointerUp={(e) => dragHelper.handlePointerUp(e)}
+        onPointerMoveCapture={(e) => dragHelper.handlePointerMove(e)}
+        onPointerUpCapture={(e) => dragHelper.handlePointerUp(e)}
       ></div>
     </div>
   );

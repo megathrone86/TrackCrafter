@@ -27,8 +27,19 @@ export class PaletteDragHelper {
 
   public handlePointerDown(e: React.PointerEvent) {
     this.mousePressed = true;
-    (e.target as HTMLDivElement).setPointerCapture(e.pointerId);
+    const target = e.target as HTMLElement;
+    target.setPointerCapture(e.pointerId);
     this.startMousePos = { x: e.clientX, y: e.clientY };
+
+    const prev_onlostpointercapture = target.onlostpointercapture;
+    target.onlostpointercapture = (e) => {
+      this.handlePointerUp();
+      target.onlostpointercapture = prev_onlostpointercapture;
+    };
+  }
+
+  private handleLostPointerCapture(e: PointerEvent) {
+    this.handlePointerUp();
   }
 
   public handlePointerMove(e: React.PointerEvent) {
@@ -45,8 +56,11 @@ export class PaletteDragHelper {
     }
   }
 
-  public handlePointerUp(e: React.PointerEvent) {
-    (e.target as HTMLDivElement).releasePointerCapture(e.pointerId);
+  public handlePointerUp(e?: React.PointerEvent) {
+    if (e) {
+      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    }
+
     this.mousePressed = false;
 
     if (this.draggingStarted) {
@@ -94,7 +108,11 @@ export class PaletteDragHelper {
   }
 
   public endDragging() {
-    this.dispatch(addItem());
+    const addingItem = store.getState().track.addingItem;
+    if (addingItem && !addingItem.screenPos) {
+      this.dispatch(addItem(addingItem.model));
+    }
+
     this.dispatch(setAddingItem(null));
 
     this.drawArea = null;

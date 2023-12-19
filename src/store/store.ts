@@ -14,6 +14,7 @@ import {
   setAddingItemScreenPosition,
   setCamPos,
   setGridSize,
+  setSelection,
 } from "./actions";
 import { Point } from "../components/shared/Point";
 
@@ -30,6 +31,7 @@ export interface IRootState {
   camPos: CamPosition;
   track: {
     items: TrackElementModel[];
+    selection: TrackElementModel[];
     addingItem: AddingItem | null;
   };
 }
@@ -39,11 +41,10 @@ const preloadedState: IRootState = {
   gridSize: gridSizes[3],
   track: {
     items: [],
+    selection: [],
     addingItem: null,
   },
 };
-
-createReducer(preloadedState, (builder) => {});
 
 const reducer = combineReducers({
   camPos: createReducer(preloadedState.camPos, (builder) => {
@@ -52,44 +53,34 @@ const reducer = combineReducers({
   gridSize: createReducer(preloadedState.gridSize, (builder) => {
     builder.addCase(setGridSize, (_, action) => action.payload);
   }),
-  //TODO: пришлось объединить в один редьюсер, чтобы можно было добавлять addingItem в items по окончанию перетаскивания. Нужно как-то переделать по-человечески, а то читаемость нулевая
-  track: createReducer(preloadedState.track, (builder) => {
-    builder.addCase(addItem, (prevValue, action) => ({
-      ...prevValue,
-      items: prevValue.addingItem
-        ? prevValue.items.concat([prevValue.addingItem.model])
-        : prevValue.items,
-    }));
-    builder.addCase(setAddingItem, (prevValue, action) => ({
-      ...prevValue,
-      addingItem: action.payload,
-    }));
-    builder.addCase(setAddingItemScreenPosition, (prevValue, action) =>
-      prevValue
-        ? {
-            ...prevValue,
-            addingItem: prevValue.addingItem
-              ? {
-                  model: { ...prevValue.addingItem?.model, x: 0, y: 0 },
-                  screenPos: action.payload,
-                }
-              : null,
-          }
-        : prevValue
-    );
-    builder.addCase(setAddingItemMapPosition, (prevValue, action) =>
-      prevValue
-        ? {
-            ...prevValue,
-            addingItem: prevValue.addingItem
-              ? {
-                  model: { ...prevValue.addingItem.model, ...action.payload },
-                  screenPos: undefined,
-                }
-              : null,
-          }
-        : prevValue
-    );
+  track: combineReducers({
+    items: createReducer(preloadedState.track.items, (builder) => {
+      builder.addCase(addItem, (prevValue, action) =>
+        prevValue.concat([action.payload])
+      );
+    }),
+    selection: createReducer(preloadedState.track.selection, (builder) => {
+      builder.addCase(setSelection, (_, action) => action.payload);
+    }),
+    addingItem: createReducer(preloadedState.track.addingItem, (builder) => {
+      builder.addCase(setAddingItem, (_, action) => action.payload);
+      builder.addCase(setAddingItemScreenPosition, (prevValue, action) =>
+        prevValue
+          ? {
+              model: { ...prevValue.model, x: 0, y: 0 },
+              screenPos: action.payload,
+            }
+          : null
+      );
+      builder.addCase(setAddingItemMapPosition, (prevValue, action) =>
+        prevValue
+          ? {
+              model: { ...prevValue.model, ...action.payload },
+              screenPos: undefined,
+            }
+          : null
+      );
+    }),
   }),
 });
 
