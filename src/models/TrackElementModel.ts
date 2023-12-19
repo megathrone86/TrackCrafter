@@ -8,4 +8,7 @@ export enum TrackElementType {
 export interface TrackElementModel extends Point {
   //тип элемента
   type: TrackElementType;
+
+  //текстовый id
+  id: string;
 }

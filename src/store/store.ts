@@ -15,7 +15,6 @@ import {
   setCamPos,
   setGridSize,
 } from "./actions";
-import { ConeColor, createConeModel } from "../models/ConeModel";
 import { Point } from "../components/shared/Point";
 
 export interface AddingItem {
@@ -39,7 +38,7 @@ const preloadedState: IRootState = {
   camPos: { x: 0, y: 0 },
   gridSize: gridSizes[3],
   track: {
-    items: [createConeModel(ConeColor.Red)], //TODO: debug
+    items: [],
     addingItem: null,
   },
 };
@@ -97,3 +96,8 @@ const reducer = combineReducers({
 export const store = configureStore({
   reducer,
 });
+
+export function newItemIdSelector(state: IRootState): string {
+  const itemNumber = state.track.items.length + 1;
+  return itemNumber.toString();
+}

@@ -7,6 +7,7 @@ import { gridSizes } from "../../consts";
 import "./SidePanel.scss";
 import { Cone } from "./objects/Cone/Cone";
 import { ConeColor, createConeModel } from "../../models/ConeModel";
+import { TreeItem } from "./TreeItem";
 
 interface IProps {}
 
@@ -17,6 +18,7 @@ export function SidePanel(props: IProps) {
   const dispatch = useDispatch();
 
   const gridSize = useSelector((state: IRootState) => state.gridSize);
+  const items = useSelector((state: IRootState) => state.track.items);
 
   return (
     <div className="tc-SidePanel">
@@ -39,6 +41,9 @@ export function SidePanel(props: IProps) {
       </div>
       <div className="tc-SidePanel-tree">
         <p>Дерево объектов</p>
+        {items.map((item, i) => (
+          <TreeItem key={i} model={item}></TreeItem>
+        ))}
       </div>
     </div>
   );

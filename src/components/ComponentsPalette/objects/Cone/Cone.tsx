@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Cone.scss";
 import { ConeModel, createConeModel } from "../../../../models/ConeModel";
 import { GetConeColor } from "../../../DrawArea/elements/Cone/Cone";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { PaletteDragHelper } from "../PaletteDragHelper";
 
 interface IProps {
