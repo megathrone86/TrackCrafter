@@ -1,4 +1,4 @@
-import { store } from "./store/store";
+import { store } from "../store/store";
 
 export function createNewItemId(): string {
   const items = store.getState().track.items;

@@ -4,8 +4,8 @@ import { IRootState } from "../../store/store";
 import { useEffect, useRef, useState } from "react";
 import { BaseItem } from "./elements/BaseItem/BaseItem";
 import { Point } from "../shared/Point";
-import { setCamPos } from "../../store/actions";
 import { GeometryHelper } from "./GeometryHelper";
+import { MapDragHelper } from "./MapDragHelper";
 
 export const drawAreaClass = "tc-DrawArea";
 export const pixelsToMeterRatio = 100;
@@ -18,8 +18,7 @@ export function DrawArea() {
   const viewportRef = useRef(null);
   const [viewportSize, setViewportSize] = useState<Point>({ x: 0, y: 0 });
 
-  const [camStartPos, setCamStartPos] = useState<Point | null>(null);
-  const [mouseStartPos, setMouseStartPos] = useState<Point | null>(null);
+  const [dragHelper] = useState(new MapDragHelper(dispatch, viewportRef));
 
   const gridSize = useSelector((state: IRootState) => state.gridSize).value;
   const items = useSelector((state: IRootState) => state.track.items);
@@ -41,9 +40,7 @@ export function DrawArea() {
     <div
       className={drawAreaClass}
       ref={viewportRef}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
+      onPointerDown={(e) => dragHelper.handlePointerDown(e)}
     >
       <div className="tc-DrawArea-grid">
         {columns.map((x) => (
@@ -70,10 +67,7 @@ export function DrawArea() {
         ))}
       </div>
 
-      <div className="tc-DrawArea-debugInfo">
-        <p>camPos.y = {camPos.y}</p>
-        {/* <p>items = {items.length}</p> */}
-      </div>
+      <div className="tc-DrawArea-debugInfo"></div>
 
       {items.map((item, i) => (
         <BaseItem key={i} model={item}></BaseItem>
@@ -91,38 +85,6 @@ export function DrawArea() {
     coordinate: number
   ) {
     return Number.isInteger(coordinate) ? `${class1} ${class2}` : class1;
-  }
-
-  function handlePointerDown(e: React.PointerEvent) {
-    if (viewportRef.current) {
-      setCamStartPos(camPos);
-      setMouseStartPos({ x: e.clientX, y: e.clientY });
-      const element = viewportRef.current as HTMLDivElement;
-      element.setPointerCapture(e.pointerId);
-    }
-  }
-
-  function handlePointerMove(e: React.PointerEvent, release?: boolean) {
-    if (mouseStartPos && camStartPos) {
-      const delta = {
-        x: e.clientX - mouseStartPos.x,
-        y: e.clientY - mouseStartPos.y,
-      };
-
-      dispatch(
-        setCamPos({ x: camStartPos.x - delta.x, y: camStartPos.y - delta.y })
-      );
-
-      if (release && viewportRef.current) {
-        const element = viewportRef.current as HTMLDivElement;
-        element.releasePointerCapture(e.pointerId);
-        setMouseStartPos(null);
-      }
-    }
-  }
-
-  function handlePointerUp(e: React.PointerEvent) {
-    handlePointerMove(e, true);
   }
 
   function getGrid(geometryHelper: GeometryHelper) {
