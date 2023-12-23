@@ -4,7 +4,7 @@ import { Point } from "../components/shared/Point";
 const dragStartDistance = 5;
 
 export abstract class MouseDragHelper extends MouseMoveHelper {
-  private draggingStarted = false;
+  protected draggingStarted = false;
   private target: HTMLElement | null = null;
 
   protected abstract getTarget(): HTMLElement;
@@ -33,12 +33,12 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
   private startDragging(mousePos: Point) {
     this.draggingStarted = true;
 
-    this.OnDraggingStarted(mousePos);
+    this.onDraggingStarted(mousePos);
 
     this.target = this.getTarget();
   }
 
-  protected abstract OnDraggingStarted(mousePos: Point): void;
+  protected abstract onDraggingStarted(mousePos: Point): void;
 
   private updateDragging(mousePos: Point) {
     if (this.target) {
@@ -49,7 +49,7 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
         mousePos.y >= rect.top &&
         mousePos.y <= rect.bottom
       ) {
-        this.OnDraggingInsideTarget({
+        this.onDraggingInsideTarget({
           x: mousePos.x - rect.left,
           y: mousePos.y - rect.top,
         });
@@ -57,16 +57,16 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
       }
     }
 
-    this.OnDraggingOutsideTarget(mousePos);
+    this.onDraggingOutsideTarget(mousePos);
   }
 
-  protected abstract OnDraggingOutsideTarget(mousePos: Point): void;
-  protected abstract OnDraggingInsideTarget(mousePos: Point): void;
+  protected abstract onDraggingOutsideTarget(mousePos: Point): void;
+  protected abstract onDraggingInsideTarget(mousePos: Point): void;
 
   private endDragging() {
     this.draggingStarted = false;
-    this.OnDraggingFinished();
+    this.onDraggingFinished();
   }
 
-  protected abstract OnDraggingFinished(): void;
+  protected abstract onDraggingFinished(): void;
 }

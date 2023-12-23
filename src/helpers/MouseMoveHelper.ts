@@ -6,7 +6,7 @@ export abstract class MouseMoveHelper {
   protected startMousePos: Point | null = null;
   private timeout: NodeJS.Timeout | null = null;
 
-  constructor(private viewportRef: React.MutableRefObject<null>) {}
+  constructor(protected viewportRef: React.MutableRefObject<null>) {}
 
   public handlePointerDown(e: React.PointerEvent) {
     if (this.viewportRef.current) {

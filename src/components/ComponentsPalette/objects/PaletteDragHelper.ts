@@ -27,7 +27,7 @@ export class PaletteDragHelper extends MouseDragHelper {
     return elements[0] as HTMLDivElement;
   }
 
-  protected OnDraggingStarted(mousePos: Point) {
+  protected onDraggingStarted(mousePos: Point) {
     const model = this.modelGenerator();
     this.dispatch(
       setAddingItem({
@@ -37,7 +37,7 @@ export class PaletteDragHelper extends MouseDragHelper {
     );
   }
 
-  protected OnDraggingInsideTarget(mousePos: Point) {
+  protected onDraggingInsideTarget(mousePos: Point) {
     const camPos = store.getState().camPos;
     const gridSize = store.getState().gridSize.value;
     const helper = new GeometryHelper(camPos, gridSize);
@@ -46,11 +46,11 @@ export class PaletteDragHelper extends MouseDragHelper {
     this.dispatch(setAddingItemMapPosition({ x, y }));
   }
 
-  protected OnDraggingOutsideTarget(mousePos: Point) {
+  protected onDraggingOutsideTarget(mousePos: Point) {
     this.dispatch(setAddingItemScreenPosition(mousePos));
   }
 
-  protected OnDraggingFinished() {
+  protected onDraggingFinished() {
     const addingItem = store.getState().track.addingItem;
     if (addingItem && !addingItem.screenPos) {
       this.dispatch(addItem(addingItem.model));

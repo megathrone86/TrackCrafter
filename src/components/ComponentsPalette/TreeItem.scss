@@ -1,0 +1,8 @@
+.tc-TreeItem {
+    border: 1px solid transparent;
+
+    &.tc-TreeItem-selected {
+        background: #dadaff;
+        border: 1px solid #82baff;
+    }
+}

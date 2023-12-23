@@ -8,33 +8,55 @@
         user-select: none;
 
         .tc-DrawArea-gridVerticalLine {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                border-right: 1px dashed #2cc92c88;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-right: 1px dashed #2cc92c88;
+        }
+
+        .tc-DrawArea-gridVerticalLine_major {
+            border-right: 2px dotted #44aa44dd;
+        }
+
+        .tc-DrawArea-gridHorizontalLine {
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-bottom: 1px dashed #2cc92c88;
+            pointer-events: none;
+        }
+
+        .tc-DrawArea-gridHorizontalLine_major {
+            border-bottom: 2px dotted #44aa44dd;
+        }
+
+        .tc-DrawArea-debugInfo {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+    }
+
+    .tc-DrawArea-selection {
+        animation: rotate 5s infinite, color_change 1s infinite;
+        border-width: 3px;
+        border-style: dashed;
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(180deg);
             }
-        
-            .tc-DrawArea-gridVerticalLine_major {
-                border-right: 2px dotted #44aa44dd;                
+        }
+
+        @keyframes color_change {
+            0% {
+                border-color: yellow;
             }
-        
-            .tc-DrawArea-gridHorizontalLine {
-                position: absolute;
-                left: 0;
-                right: 0;
-                border-bottom: 1px dashed #2cc92c88;
-                pointer-events: none;
+
+            100% {
+                border-color: purple;
             }
-        
-            .tc-DrawArea-gridHorizontalLine_major {
-                border-bottom: 2px dotted #44aa44dd;
-            }
-        
-            .tc-DrawArea-debugInfo {
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                pointer-events: none;
-            }
+        }
     }
 }
