@@ -12,7 +12,7 @@ export class MapElementDragHelper extends MouseDragHelper {
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
-    private element: TrackElementModel
+    private model: TrackElementModel
   ) {
     super(viewportRef);
   }
@@ -37,14 +37,7 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   private updateSelection() {
-    const selection = [this.element];
-    this.dispatch(setSelection(selection));
-
-    //TODO: добавить поддержку выделения по ctrl и shift
-    // const selection = store.getState().track.selection;
-    // if (selection.includes(this.element))
-
-    //TODO: добавить поддержку выделения рамкой (на далекое будущее)
+    this.dispatch(setSelection(this.model));
   }
 
   protected onDraggingStarted(mousePos: Point) {

@@ -1,11 +1,14 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ConeModel } from "../../models/ConeModel";
 import { TrackElementType } from "../../models/TrackElementModel";
 import { IRootState } from "../../store/store";
 import { IBaseTrackElementProps } from "../DrawArea/elements/IModelProps";
 import "./TreeItem.scss";
+import { setSelection } from "../../store/actions";
 
 export function TreeItem(props: IBaseTrackElementProps) {
+  const dispatch = useDispatch();
+
   const isSelected = useSelector(
     (state: IRootState) => state.track.selection
   ).includes(props.model);
@@ -24,12 +27,16 @@ export function TreeItem(props: IBaseTrackElementProps) {
       <div
         className={"tc-TreeItem " + getClassName()}
         style={{ color: model.color }}
+        onClick={handleClick}
       >
         Конус {model.id}
       </div>
     );
   }
 
+  function handleClick() {
+    dispatch(setSelection(model));
+  }
   function getClassName() {
     if (isSelected) return "tc-TreeItem-selected";
     return "";

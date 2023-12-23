@@ -60,7 +60,15 @@ const reducer = combineReducers({
       );
     }),
     selection: createReducer(preloadedState.track.selection, (builder) => {
-      builder.addCase(setSelection, (_, action) => action.payload);
+      builder.addCase(setSelection, (_, action) => {
+        const selection = [action.payload];
+
+        //TODO: добавить поддержку выделения по ctrl и shift
+        // if (prevValue.includes(this.element))
+
+        //TODO: добавить поддержку выделения рамкой (на далекое будущее)
+        return selection;
+      });
     }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {
       builder.addCase(setAddingItem, (_, action) => action.payload);
