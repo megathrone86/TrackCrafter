@@ -2,14 +2,14 @@ import { Dispatch } from "react";
 import { AnyAction } from "redux";
 import { Point } from "../../shared/Point";
 import { drawAreaClass } from "../DrawArea";
-import { store } from "../../../store/store";
+import { MapBaseItem, store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { moveItems, setSelection } from "../../../store/actions";
-import { TrackElementModel } from "../../../models/TrackElementModel";
-import { geometryHelper } from "../GeometryHelper";
+import { GeometryHelper } from "../GeometryHelper";
 
-interface MovingItem extends Point {
-  item: TrackElementModel;
+interface MovingItem {
+  item: MapBaseItem;
+  offset: Point;
 }
 
 export class MapElementDragHelper extends MouseDragHelper {
@@ -18,7 +18,8 @@ export class MapElementDragHelper extends MouseDragHelper {
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
-    private model: TrackElementModel
+    private item: MapBaseItem,
+    private geometryHelper: GeometryHelper
   ) {
     super(viewportRef);
   }
@@ -29,6 +30,7 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   protected onPointerDown(e: React.PointerEvent) {
+    e.preventDefault();
     e.stopPropagation();
   }
 
@@ -43,33 +45,31 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   private updateSelection(e: PointerEvent) {
-    this.dispatch(setSelection({ item: this.model, isAdditive: e.ctrlKey }));
+    this.dispatch(setSelection({ item: this.item, isAdditive: e.ctrlKey }));
   }
 
   protected onDraggingStarted(mousePos: Point) {
-    const selection = store.getState().track.selection;
+    const selection = store.getState().track.items.filter((t) => t.selected);
 
     this.movingItemOffsets = selection.map((t) => ({
       item: t,
-      x: t.x - this.model.x,
-      y: t.y - this.model.y,
+      offset: {
+        x: this.item.model.x - t.model.x,
+        y: this.item.model.y - t.model.y,
+      },
     }));
   }
 
   protected onDraggingInsideTarget(mousePos: Point) {
-
-    const worldPos = geometryHelper.mousePosToWord(mousePos, true);
-    this.dispatch(
-      moveItems(
-        this.movingItemOffsets.map((t) => ({
-          item: t.item,
-          newPos: {
-            x: worldPos.x - t.x,
-            y: worldPos.y - t.y,
-          },
-        }))
-      )
-    );
+    const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
+    const movedItems = this.movingItemOffsets.map((t) => ({
+      item: t.item,
+      newPos: {
+        x: worldPos.x - t.offset.x,
+        y: worldPos.y - t.offset.y,
+      },
+    }));
+    this.dispatch(moveItems(movedItems));
   }
 
   protected onDraggingOutsideTarget(mousePos: Point) {}

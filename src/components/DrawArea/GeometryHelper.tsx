@@ -1,14 +1,9 @@
 import { pixelsToMeterRatio } from "../../consts";
-import { store } from "../../store/store";
+import { CamPosition } from "../../store/store";
 import { Point } from "../shared/Point";
 
-class GeometryHelper {
-  private get camPos() {
-    return store.getState().camPos;
-  }
-  private get gridSize() {
-    return store.getState().gridSize.value;
-  }
+export class GeometryHelper {
+  constructor(private camPos: CamPosition, private gridSize: number) {}
 
   public getGridCellSize() {
     return pixelsToMeterRatio * this.gridSize;
@@ -34,5 +29,3 @@ class GeometryHelper {
     return Math.round(coordinate / this.gridSize) * this.gridSize;
   }
 }
-
-export const geometryHelper = new GeometryHelper();

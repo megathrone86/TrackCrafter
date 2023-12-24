@@ -20,11 +20,21 @@ import {
 } from "./actions";
 import { Point } from "../components/shared/Point";
 
-export interface AddingItem {
-  model: TrackElementModel;
+export interface AddingItem extends MapItem<TrackElementModel> {
   screenPos?: Point;
   mapPos?: Point;
 }
+
+export interface MapItem<T> {
+  //модель, которая сохраняется в файл
+  model: T;
+
+  //временные свойства, используемые для работы
+  uid: string;
+  selected: boolean;
+}
+
+export interface MapBaseItem extends MapItem<TrackElementModel> {}
 
 export interface CamPosition extends Point {}
 
@@ -32,8 +42,7 @@ export interface IRootState {
   gridSize: Option<number>;
   camPos: CamPosition;
   track: {
-    items: TrackElementModel[];
-    selection: TrackElementModel[];
+    items: MapBaseItem[];
     addingItem: AddingItem | null;
   };
 }
@@ -43,7 +52,6 @@ const preloadedState: IRootState = {
   gridSize: gridSizes[3],
   track: {
     items: [],
-    selection: [],
     addingItem: null,
   },
 };
@@ -60,41 +68,46 @@ const reducer = combineReducers({
       builder.addCase(addItem, (prevValue, action) =>
         prevValue.concat([action.payload])
       );
+      builder.addCase(setSelection, (prevValue, action) => {
+        const items = current(prevValue);
+        if (action.payload.isAdditive) {
+          return items.map((t) => {
+            if (action.payload.item.model === t.model) {
+              return { ...t, selected: !t.selected };
+            } else {
+              return t;
+            }
+          });
+        } else {
+          return items.map((t) => {
+            return { ...t, selected: action.payload.item.model === t.model };
+          });
+        }
+      });
       builder.addCase(moveItems, (prevValue, action) =>
         current(prevValue).map((t) => {
-          const movedItem = action.payload.find((m) => m.item === t);
+          const movedItem = action.payload.find((m) => m.item.uid === t.uid);
           if (movedItem) {
-            console.debug("move item ", t.id);
-            return { ...t, x: movedItem.newPos.x, y: movedItem.newPos.y };
+            return {
+              ...t,
+              model: {
+                ...t.model,
+                x: movedItem.newPos.x,
+                y: movedItem.newPos.y,
+              },
+            };
           } else {
             return t;
           }
         })
       );
     }),
-    selection: createReducer(preloadedState.track.selection, (builder) => {
-      builder.addCase(setSelection, (prevValue, action) => {
-        const item = action.payload.item;
-
-        //TODO: добавить поддержку выделения рамкой (на далекое будущее)
-
-        if (action.payload.isAdditive) {
-          //внутри редьюсера в prevValue на самом деле будет прокси класс и includes не будет нормально работать
-          const realPrevValue = current(prevValue);
-
-          return realPrevValue.includes(item)
-            ? realPrevValue.filter((t) => t !== item)
-            : realPrevValue.concat([item]);
-        } else {
-          return [item];
-        }
-      });
-    }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {
       builder.addCase(setAddingItem, (_, action) => action.payload);
       builder.addCase(setAddingItemScreenPosition, (prevValue, action) =>
         prevValue
           ? {
+              ...prevValue,
               model: { ...prevValue.model, x: 0, y: 0 },
               screenPos: action.payload,
             }
@@ -103,6 +116,7 @@ const reducer = combineReducers({
       builder.addCase(setAddingItemMapPosition, (prevValue, action) =>
         prevValue
           ? {
+              ...prevValue,
               model: { ...prevValue.model, ...action.payload },
               screenPos: undefined,
             }

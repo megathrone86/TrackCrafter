@@ -11,13 +11,15 @@ import { TrackElementModel } from "../../../models/TrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
 import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
-import { geometryHelper } from "../../DrawArea/GeometryHelper";
+import { v4 as uuidv4 } from "uuid";
+import { GeometryHelper } from "../../DrawArea/GeometryHelper";
 
 export class PaletteDragHelper extends MouseDragHelper {
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
-    private modelGenerator: () => TrackElementModel
+    private modelGenerator: () => TrackElementModel,
+    private geometryHelper: GeometryHelper
   ) {
     super(viewportRef);
   }
@@ -32,13 +34,15 @@ export class PaletteDragHelper extends MouseDragHelper {
     this.dispatch(
       setAddingItem({
         screenPos: mousePos,
+        selected: false,
+        uid: uuidv4(),
         model,
       })
     );
   }
 
   protected onDraggingInsideTarget(mousePos: Point) {
-    const worldPos = geometryHelper.mousePosToWord(mousePos, true);
+    const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     this.dispatch(setAddingItemMapPosition(worldPos));
   }
 
@@ -49,7 +53,7 @@ export class PaletteDragHelper extends MouseDragHelper {
   protected onDraggingFinished() {
     const addingItem = store.getState().track.addingItem;
     if (addingItem && !addingItem.screenPos) {
-      this.dispatch(addItem(addingItem.model));
+      this.dispatch(addItem(addingItem));
     }
     this.dispatch(setAddingItem(null));
   }

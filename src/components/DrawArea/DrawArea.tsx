@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BaseItem } from "./elements/BaseItem/BaseItem";
 import { Point } from "../shared/Point";
 import { MapDragHelper } from "./MapDragHelper";
-import { geometryHelper } from "./GeometryHelper";
+import { GeometryHelper } from "./GeometryHelper";
 
 export const drawAreaClass = "tc-DrawArea";
 
@@ -17,11 +17,15 @@ export function DrawArea() {
   const viewportRef = useRef(null);
   const [viewportSize, setViewportSize] = useState<Point>({ x: 0, y: 0 });
 
+  const camPos = useSelector((state: IRootState) => state.camPos);
+  const gridSize = useSelector((state: IRootState) => state.gridSize.value);
+
+  const geometryHelper = new GeometryHelper(camPos, gridSize);
+
   const [dragHelper] = useState(new MapDragHelper(dispatch, viewportRef));
 
   const items = useSelector((state: IRootState) => state.track.items);
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
-  const camPos = useSelector((state: IRootState) => state.camPos);
 
   useEffect(() => {
     if (viewportRef.current) {
@@ -66,11 +70,11 @@ export function DrawArea() {
       <div className="tc-DrawArea-debugInfo"></div>
 
       {items.map((item, i) => (
-        <BaseItem key={i} model={item}></BaseItem>
+        <BaseItem key={i} item={item}></BaseItem>
       ))}
 
       {addingItem && !addingItem.screenPos && (
-        <BaseItem model={addingItem.model}></BaseItem>
+        <BaseItem item={addingItem}></BaseItem>
       )}
     </div>
   );

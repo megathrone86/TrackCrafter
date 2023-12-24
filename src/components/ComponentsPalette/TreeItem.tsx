@@ -1,7 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ConeModel } from "../../models/ConeModel";
 import { TrackElementType } from "../../models/TrackElementModel";
-import { IRootState } from "../../store/store";
 import { IBaseTrackElementProps } from "../DrawArea/elements/IModelProps";
 import "./TreeItem.scss";
 import { setSelection } from "../../store/actions";
@@ -9,11 +8,7 @@ import { setSelection } from "../../store/actions";
 export function TreeItem(props: IBaseTrackElementProps) {
   const dispatch = useDispatch();
 
-  const isSelected = useSelector(
-    (state: IRootState) => state.track.selection
-  ).includes(props.model);
-
-  const model = props.model;
+  const model = props.item.model;
 
   switch (model.type) {
     case TrackElementType.Cone:
@@ -35,10 +30,10 @@ export function TreeItem(props: IBaseTrackElementProps) {
   }
 
   function handleClick(e: React.MouseEvent) {
-    dispatch(setSelection({ item: model, isAdditive: e.ctrlKey }));
+    dispatch(setSelection({ item: props.item, isAdditive: e.ctrlKey }));
   }
   function getClassName() {
-    if (isSelected) return "tc-TreeItem-selected";
+    if (props.item.selected) return "tc-TreeItem-selected";
     return "";
   }
 }
