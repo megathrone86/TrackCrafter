@@ -1,20 +1,19 @@
-import { RadioButtons } from "../shared/radioButtons/RadioButtons";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../store/store";
-import { setGridSize } from "../../store/actions";
+import { deleteItems, setGridSize, setSelectedAll } from "../../store/actions";
 import { gridSizes } from "../../consts";
 
 import "./SidePanel.scss";
 import { Cone } from "./objects/Cone/Cone";
 import { ConeColor, createConeModel } from "../../models/IConeModel";
 import { TreeItem } from "./TreeItem";
-
-interface IProps {}
+import { IconButton } from "../shared/IconButton/IconButton";
+import { RadioButtons } from "../shared/RadioButtons/RadioButtons";
 
 const redConeModel = createConeModel(ConeColor.Red);
 const blueConeModel = createConeModel(ConeColor.Blue);
 
-export function SidePanel(props: IProps) {
+export function SidePanel() {
   const dispatch = useDispatch();
 
   const gridSize = useSelector((state: IRootState) => state.gridSize);
@@ -30,6 +29,24 @@ export function SidePanel(props: IProps) {
           allowDeselect={false}
           selectionChanged={(e) => dispatch(setGridSize(e))}
         ></RadioButtons>
+      </div>
+      <div className="tc-SidePanel-actions">
+        <p>Действия</p>
+
+        <div className="tc-SidePanel-actionsList">
+          <IconButton
+            icon="fi-rs-list-check"
+            hint="Выделить все"
+            enabled={canSelectAll}
+            onClick={selectAll}
+          />
+          <IconButton
+            icon="fi-rs-trash"
+            hint="Удалить выделенное"
+            enabled={canRemoveSelection}
+            onClick={removeSelection}
+          />
+        </div>
       </div>
       <div className="tc-SidePanel-componentsPalette">
         <p>Создание компонентов</p>
@@ -47,4 +64,28 @@ export function SidePanel(props: IProps) {
       </div>
     </div>
   );
+
+  function canSelectAll() {
+    return items.some((t) => !t.selected);
+  }
+  function selectAll() {
+    dispatch(setSelectedAll());
+  }
+
+  function canRemoveSelection() {
+    return items.some((t) => t.selected);
+  }
+  function removeSelection() {
+    const selectedItems = items.filter((t) => t.selected);
+
+    //TODO: заменить на нормальный диалог
+    if (
+      // eslint-disable-next-line no-restricted-globals
+      confirm(
+        `Вы уверен, что хотите удалить ${selectedItems.length} элементов?`
+      )
+    ) {
+      dispatch(deleteItems(selectedItems));
+    }
+  }
 }

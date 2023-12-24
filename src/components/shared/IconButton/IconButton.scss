@@ -1,0 +1,22 @@
+.tc-IconButton {
+    width: 30px;
+    height: 28px;
+    background: #eee;
+    border: 1px solid #999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+        margin-top: 5px;
+        pointer-events: none;
+    }
+
+    &.tc-IconButton-enabled:hover {
+        background: #bbb;
+    }
+
+    &:not(.tc-IconButton-enabled) i {
+        opacity: 0.3;
+    }
+}

@@ -18,5 +18,7 @@ export const setSelection = createAction<{
   switchMode: boolean;
   additiveMode: boolean;
 }>("setSelection");
+export const setSelectedAll = createAction("setSelectedAll");
 export const moveItems =
   createAction<{ item: IMapBaseItem; newPos: IPoint }[]>("moveItems");
+export const deleteItems = createAction<IMapBaseItem[]>("deleteItems");

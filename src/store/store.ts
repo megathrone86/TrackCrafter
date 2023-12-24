@@ -10,12 +10,14 @@ import { gridSizes } from "../consts";
 import { IOption } from "../components/shared/IOption";
 import {
   addItem,
+  deleteItems,
   moveItems,
   setAddingItem,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
   setCamPos,
   setGridSize,
+  setSelectedAll,
   setSelection,
 } from "./actions";
 import { IPoint } from "../components/shared/IPoint";
@@ -69,6 +71,12 @@ const reducer = combineReducers({
         current(prevValue)
           .map((t) => ({ ...t, selected: false }))
           .concat([{ ...action.payload, selected: true }])
+      );
+      builder.addCase(setSelectedAll, (prevValue, _) =>
+        current(prevValue).map((t) => ({ ...t, selected: true }))
+      );
+      builder.addCase(deleteItems, (prevValue, action) =>
+        current(prevValue).filter((t) => !action.payload.includes(t))
       );
       builder.addCase(setSelection, (prevValue, action) => {
         const items = current(prevValue);
