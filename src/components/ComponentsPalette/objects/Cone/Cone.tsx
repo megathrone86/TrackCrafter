@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import "./Cone.scss";
 import { IConeModel, createConeModel } from "../../../../models/IConeModel";
 import { GetConeColor } from "../../../DrawArea/elements/Cone/Cone";
@@ -18,7 +18,7 @@ export function Cone(props: IProps) {
   const viewportRef = useRef(null);
 
   const geometryHelper = new GeometryHelper(
-    useSelector(geometryHelperSelector)
+    useSelector(geometryHelperSelector.selector, geometryHelperSelector.equlity)
   );
 
   const dragHelper = new PaletteDragHelper(

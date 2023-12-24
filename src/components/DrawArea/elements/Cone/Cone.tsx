@@ -17,7 +17,7 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
   const camPos = useSelector((state: IRootState) => state.camPos);
 
   const geometryHelper = new GeometryHelper(
-    useSelector(geometryHelperSelector)
+    useSelector(geometryHelperSelector.selector, geometryHelperSelector.equlity)
   );
 
   const dragHelper = new MapElementDragHelper(
