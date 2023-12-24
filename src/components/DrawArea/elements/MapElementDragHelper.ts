@@ -45,7 +45,13 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   private updateSelection(e: PointerEvent) {
-    this.dispatch(setSelection({ item: this.item, isAdditive: e.ctrlKey }));
+    this.dispatch(
+      setSelection({
+        item: this.item,
+        additiveMode: e.shiftKey,
+        switchMode: e.ctrlKey,
+      })
+    );
   }
 
   protected onDraggingStarted(mousePos: Point) {

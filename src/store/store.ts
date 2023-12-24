@@ -66,11 +66,21 @@ const reducer = combineReducers({
   track: combineReducers({
     items: createReducer(preloadedState.track.items, (builder) => {
       builder.addCase(addItem, (prevValue, action) =>
-        prevValue.concat([action.payload])
+        current(prevValue)
+          .map((t) => ({ ...t, selected: false }))
+          .concat([{ ...action.payload, selected: true }])
       );
       builder.addCase(setSelection, (prevValue, action) => {
         const items = current(prevValue);
-        if (action.payload.isAdditive) {
+        if (action.payload.additiveMode) {
+          return items.map((t) => {
+            if (action.payload.item.model === t.model) {
+              return { ...t, selected: true };
+            } else {
+              return t;
+            }
+          });
+        } else if (action.payload.switchMode) {
           return items.map((t) => {
             if (action.payload.item.model === t.model) {
               return { ...t, selected: !t.selected };

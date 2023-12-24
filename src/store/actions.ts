@@ -15,7 +15,8 @@ export const setAddingItemMapPosition = createAction<Point>(
 export const addItem = createAction<MapBaseItem>("addItem");
 export const setSelection = createAction<{
   item: MapBaseItem;
-  isAdditive: boolean;
+  switchMode: boolean;
+  additiveMode: boolean;
 }>("setSelection");
 export const moveItems =
   createAction<{ item: MapBaseItem; newPos: Point }[]>("moveItems");

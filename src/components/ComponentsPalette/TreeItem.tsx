@@ -30,7 +30,13 @@ export function TreeItem(props: IBaseTrackElementProps) {
   }
 
   function handleClick(e: React.MouseEvent) {
-    dispatch(setSelection({ item: props.item, isAdditive: e.ctrlKey }));
+    dispatch(
+      setSelection({
+        item: props.item,
+        additiveMode: e.shiftKey,
+        switchMode: e.ctrlKey,
+      })
+    );
   }
   function getClassName() {
     if (props.item.selected) return "tc-TreeItem-selected";
