@@ -20,8 +20,6 @@ export function DrawArea() {
 
   const camPos = useSelector((state: IRootState) => state.camPos);
 
-  // const fuck = useSelector(geometryHelperSelector.selector, (a, b) => true);
-
   const geometryHelper = new GeometryHelper(
     useSelector(geometryHelperSelector.selector, geometryHelperSelector.equlity)
   );
