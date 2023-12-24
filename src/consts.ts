@@ -1,6 +1,6 @@
-import { Option, getOptionFromNumber } from "./components/shared/Option";
+import { IOption, getOptionFromNumber } from "./components/shared/IOption";
 
-export const gridSizes: Option<number>[] = [
+export const gridSizes: IOption<number>[] = [
   getOptionFromNumber(1),
   getOptionFromNumber(0.5),
   getOptionFromNumber(0.2),

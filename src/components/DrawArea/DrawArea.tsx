@@ -3,9 +3,10 @@ import "./DrawArea.scss";
 import { IRootState } from "../../store/store";
 import { useEffect, useRef, useState } from "react";
 import { BaseItem } from "./elements/BaseItem/BaseItem";
-import { Point } from "../shared/Point";
+import { IPoint } from "../shared/IPoint";
 import { MapDragHelper } from "./MapDragHelper";
 import { GeometryHelper } from "./GeometryHelper";
+import { geometryHelperSelector } from "../../store/shared-selectors";
 
 export const drawAreaClass = "tc-DrawArea";
 
@@ -15,12 +16,13 @@ export function DrawArea() {
   const dispatch = useDispatch();
 
   const viewportRef = useRef(null);
-  const [viewportSize, setViewportSize] = useState<Point>({ x: 0, y: 0 });
+  const [viewportSize, setViewportSize] = useState<IPoint>({ x: 0, y: 0 });
 
   const camPos = useSelector((state: IRootState) => state.camPos);
-  const gridSize = useSelector((state: IRootState) => state.gridSize.value);
 
-  const geometryHelper = new GeometryHelper(camPos, gridSize);
+  const geometryHelper = new GeometryHelper(
+    useSelector(geometryHelperSelector)
+  );
 
   const [dragHelper] = useState(new MapDragHelper(dispatch, viewportRef));
 

@@ -1,12 +1,12 @@
 import { Dispatch } from "react";
-import { Point } from "../shared/Point";
+import { IPoint } from "../shared/IPoint";
 import { setCamPos } from "../../store/actions";
 import { MouseMoveHelper } from "../../helpers/MouseMoveHelper";
 import { AnyAction } from "redux";
 import { store } from "../../store/store";
 
 export class MapDragHelper extends MouseMoveHelper {
-  private camStartPos: Point | null = null;
+  private camStartPos: IPoint | null = null;
 
   constructor(
     private dispatch: Dispatch<AnyAction>,
@@ -15,7 +15,7 @@ export class MapDragHelper extends MouseMoveHelper {
     super(viewportRef);
   }
 
-  protected onPointerMove(mousePos: Point, delta: Point) {
+  protected onPointerMove(mousePos: IPoint, delta: IPoint) {
     if (this.camStartPos) {
       this.dispatch(
         setCamPos({

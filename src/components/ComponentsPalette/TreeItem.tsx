@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
-import { ConeModel } from "../../models/ConeModel";
-import { TrackElementType } from "../../models/TrackElementModel";
+import { IConeModel } from "../../models/IConeModel";
+import { TrackElementType } from "../../models/ITrackElementModel";
 import { IBaseTrackElementProps } from "../DrawArea/elements/IModelProps";
 import "./TreeItem.scss";
 import { setSelection } from "../../store/actions";
@@ -12,12 +12,12 @@ export function TreeItem(props: IBaseTrackElementProps) {
 
   switch (model.type) {
     case TrackElementType.Cone:
-      return getCone(model as ConeModel);
+      return getCone(model as IConeModel);
     default:
       return <div>Неизвестный элемент ({model.type})</div>;
   }
 
-  function getCone(model: ConeModel) {
+  function getCone(model: IConeModel) {
     return (
       <div
         className={"tc-TreeItem " + getClassName()}

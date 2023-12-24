@@ -1,9 +1,9 @@
-import { Point } from "../components/shared/Point";
+import { IPoint } from "../components/shared/IPoint";
 
 const pointerMoveDelay = 2;
 
 export abstract class MouseMoveHelper {
-  protected startMousePos: Point | null = null;
+  protected startMousePos: IPoint | null = null;
   private timeout: NodeJS.Timeout | null = null;
 
   constructor(protected viewportRef: React.MutableRefObject<null>) {}
@@ -27,7 +27,7 @@ export abstract class MouseMoveHelper {
 
   private handlePointerMove(e: PointerEvent) {
     if (this.startMousePos) {
-      const delta: Point = {
+      const delta: IPoint = {
         x: e.clientX - this.startMousePos.x,
         y: e.clientY - this.startMousePos.y,
       };
@@ -40,7 +40,7 @@ export abstract class MouseMoveHelper {
     }
   }
 
-  protected abstract onPointerMove(mousePos: Point, delta: Point): void;
+  protected abstract onPointerMove(mousePos: IPoint, delta: IPoint): void;
 
   protected clearAll(e: PointerEvent) {
     document.onpointermove = null;

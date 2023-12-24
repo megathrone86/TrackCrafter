@@ -1,15 +1,15 @@
 import { useRef, useState } from "react";
 import "./Cone.scss";
-import { ConeModel, createConeModel } from "../../../../models/ConeModel";
+import { IConeModel, createConeModel } from "../../../../models/IConeModel";
 import { GetConeColor } from "../../../DrawArea/elements/Cone/Cone";
 import { useDispatch, useSelector } from "react-redux";
 import { PaletteDragHelper } from "../PaletteDragHelper";
 import { GeometryHelper } from "../../../DrawArea/GeometryHelper";
-import { IRootState } from "../../../../store/store";
+import { geometryHelperSelector } from "../../../../store/shared-selectors";
 
 interface IProps {
   title: string;
-  prototypeModel: ConeModel;
+  prototypeModel: IConeModel;
 }
 
 export function Cone(props: IProps) {
@@ -17,17 +17,15 @@ export function Cone(props: IProps) {
 
   const viewportRef = useRef(null);
 
-  const camPos = useSelector((state: IRootState) => state.camPos);
-  const gridSize = useSelector((state: IRootState) => state.gridSize.value);
-  const geometryHelper = new GeometryHelper(camPos, gridSize);
+  const geometryHelper = new GeometryHelper(
+    useSelector(geometryHelperSelector)
+  );
 
-  const [dragHelper] = useState(
-    new PaletteDragHelper(
-      dispatch,
-      viewportRef,
-      () => createConeModel(props.prototypeModel.color),
-      geometryHelper
-    )
+  const dragHelper = new PaletteDragHelper(
+    dispatch,
+    viewportRef,
+    () => createConeModel(props.prototypeModel.color),
+    geometryHelper
   );
 
   return (

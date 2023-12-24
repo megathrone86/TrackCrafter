@@ -1,4 +1,4 @@
-import { ConeColor, ConeModel } from "../../../../models/ConeModel";
+import { ConeColor, IConeModel } from "../../../../models/IConeModel";
 import "./Cone.scss";
 import { ITrackElementProps } from "../IModelProps";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,15 +7,18 @@ import { MapElementDragHelper } from "../MapElementDragHelper";
 import { useRef } from "react";
 import { pixelsToMeterRatio } from "../../../../consts";
 import { GeometryHelper } from "../../GeometryHelper";
+import { geometryHelperSelector } from "../../../../store/shared-selectors";
 
-export function Cone(props: ITrackElementProps<ConeModel>) {
+export function Cone(props: ITrackElementProps<IConeModel>) {
   const dispatch = useDispatch();
 
   const viewportRef = useRef(null);
 
   const camPos = useSelector((state: IRootState) => state.camPos);
-  const gridSize = useSelector((state: IRootState) => state.gridSize.value);
-  const geometryHelper = new GeometryHelper(camPos, gridSize);
+
+  const geometryHelper = new GeometryHelper(
+    useSelector(geometryHelperSelector)
+  );
 
   const dragHelper = new MapElementDragHelper(
     dispatch,
@@ -57,7 +60,7 @@ export function Cone(props: ITrackElementProps<ConeModel>) {
   }
 }
 
-export function GetConeColor(model: ConeModel) {
+export function GetConeColor(model: IConeModel) {
   switch (model.color) {
     case ConeColor.Red:
       return "#ff0000";

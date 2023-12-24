@@ -1,13 +1,13 @@
 import { Dispatch } from "react";
 import { AnyAction } from "redux";
-import { Point } from "../../shared/Point";
+import { IPoint } from "../../shared/IPoint";
 import {
   addItem,
   setAddingItem,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
 } from "../../../store/actions";
-import { TrackElementModel } from "../../../models/TrackElementModel";
+import { TrackElementModel } from "../../../models/ITrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
 import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
@@ -29,7 +29,7 @@ export class PaletteDragHelper extends MouseDragHelper {
     return elements[0] as HTMLElement;
   }
 
-  protected onDraggingStarted(mousePos: Point) {
+  protected onDraggingStarted(mousePos: IPoint) {
     const model = this.modelGenerator();
     this.dispatch(
       setAddingItem({
@@ -41,12 +41,12 @@ export class PaletteDragHelper extends MouseDragHelper {
     );
   }
 
-  protected onDraggingInsideTarget(mousePos: Point) {
+  protected onDraggingInsideTarget(mousePos: IPoint) {
     const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     this.dispatch(setAddingItemMapPosition(worldPos));
   }
 
-  protected onDraggingOutsideTarget(mousePos: Point) {
+  protected onDraggingOutsideTarget(mousePos: IPoint) {
     this.dispatch(setAddingItemScreenPosition(mousePos));
   }
 

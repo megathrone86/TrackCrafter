@@ -1,15 +1,15 @@
 import { Dispatch } from "react";
 import { AnyAction } from "redux";
-import { Point } from "../../shared/Point";
+import { IPoint } from "../../shared/IPoint";
 import { drawAreaClass } from "../DrawArea";
-import { MapBaseItem, store } from "../../../store/store";
+import { IMapBaseItem, store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { moveItems, setSelection } from "../../../store/actions";
 import { GeometryHelper } from "../GeometryHelper";
 
 interface MovingItem {
-  item: MapBaseItem;
-  offset: Point;
+  item: IMapBaseItem;
+  offset: IPoint;
 }
 
 export class MapElementDragHelper extends MouseDragHelper {
@@ -18,7 +18,7 @@ export class MapElementDragHelper extends MouseDragHelper {
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
-    private item: MapBaseItem,
+    private item: IMapBaseItem,
     private geometryHelper: GeometryHelper
   ) {
     super(viewportRef);
@@ -54,7 +54,7 @@ export class MapElementDragHelper extends MouseDragHelper {
     );
   }
 
-  protected onDraggingStarted(mousePos: Point) {
+  protected onDraggingStarted(mousePos: IPoint) {
     const selection = store.getState().track.items.filter((t) => t.selected);
 
     this.movingItemOffsets = selection.map((t) => ({
@@ -66,7 +66,7 @@ export class MapElementDragHelper extends MouseDragHelper {
     }));
   }
 
-  protected onDraggingInsideTarget(mousePos: Point) {
+  protected onDraggingInsideTarget(mousePos: IPoint) {
     const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     const movedItems = this.movingItemOffsets.map((t) => ({
       item: t.item,
@@ -78,7 +78,7 @@ export class MapElementDragHelper extends MouseDragHelper {
     this.dispatch(moveItems(movedItems));
   }
 
-  protected onDraggingOutsideTarget(mousePos: Point) {}
+  protected onDraggingOutsideTarget(mousePos: IPoint) {}
 
   protected onDraggingFinished() {}
 

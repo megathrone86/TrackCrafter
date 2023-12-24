@@ -1,16 +1,16 @@
 import { useState } from "react";
 import "./RadioButtons.scss";
-import { Option } from "../Option";
+import { IOption } from "../IOption";
 
 interface IProps<T> {
-  options: Option<T>[];
-  selection?: Option<T>;
+  options: IOption<T>[];
+  selection?: IOption<T>;
   allowDeselect?: boolean;
-  selectionChanged: (selection: Option<T>) => void;
+  selectionChanged: (selection: IOption<T>) => void;
 }
 
 export function RadioButtons<T>(props: IProps<T>) {
-  const [selection, setSelection] = useState<Option<T> | null>(
+  const [selection, setSelection] = useState<IOption<T> | null>(
     props.selection || null
   );
 
@@ -28,7 +28,7 @@ export function RadioButtons<T>(props: IProps<T>) {
     </div>
   );
 
-  function onOptionClick(o: Option<T>) {
+  function onOptionClick(o: IOption<T>) {
     if (o !== selection) {
       setSelection(o);
       props.selectionChanged(o);
@@ -37,7 +37,7 @@ export function RadioButtons<T>(props: IProps<T>) {
     }
   }
 
-  function getOptionClass(o: Option<T>) {
+  function getOptionClass(o: IOption<T>) {
     return o === selection
       ? "tc-RadioButtons-option tc-RadioButtons-selected"
       : "tc-RadioButtons-option";

@@ -6,7 +6,7 @@ import { gridSizes } from "../../consts";
 
 import "./SidePanel.scss";
 import { Cone } from "./objects/Cone/Cone";
-import { ConeColor, createConeModel } from "../../models/ConeModel";
+import { ConeColor, createConeModel } from "../../models/IConeModel";
 import { TreeItem } from "./TreeItem";
 
 interface IProps {}

@@ -1,5 +1,8 @@
 import { createNewItemId } from "../helpers/bl-helper";
-import { TrackElementModel, TrackElementType } from "./TrackElementModel";
+import {
+  TrackElementModel as ITrackElementModel,
+  TrackElementType,
+} from "./ITrackElementModel";
 
 export enum ConeColor {
   Red = "Red",
@@ -7,11 +10,11 @@ export enum ConeColor {
   Yellow = "Yellow",
 }
 
-export interface ConeModel extends TrackElementModel {
+export interface IConeModel extends ITrackElementModel {
   color: ConeColor;
 }
 
-export function createConeModel(color: ConeColor): ConeModel {
+export function createConeModel(color: ConeColor): IConeModel {
   return {
     type: TrackElementType.Cone,
     color,

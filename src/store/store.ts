@@ -5,9 +5,9 @@ import {
   current,
 } from "@reduxjs/toolkit";
 
-import { TrackElementModel } from "../models/TrackElementModel";
+import { TrackElementModel as ITrackElementModel } from "../models/ITrackElementModel";
 import { gridSizes } from "../consts";
-import { Option } from "../components/shared/Option";
+import { IOption } from "../components/shared/IOption";
 import {
   addItem,
   moveItems,
@@ -18,14 +18,14 @@ import {
   setGridSize,
   setSelection,
 } from "./actions";
-import { Point } from "../components/shared/Point";
+import { IPoint } from "../components/shared/IPoint";
 
-export interface AddingItem extends MapItem<TrackElementModel> {
-  screenPos?: Point;
-  mapPos?: Point;
+export interface IAddingItem extends IMapItem<ITrackElementModel> {
+  screenPos?: IPoint;
+  mapPos?: IPoint;
 }
 
-export interface MapItem<T> {
+export interface IMapItem<T> {
   //модель, которая сохраняется в файл
   model: T;
 
@@ -34,16 +34,16 @@ export interface MapItem<T> {
   selected: boolean;
 }
 
-export interface MapBaseItem extends MapItem<TrackElementModel> {}
+export interface IMapBaseItem extends IMapItem<ITrackElementModel> {}
 
-export interface CamPosition extends Point {}
+export interface ICamPosition extends IPoint {}
 
 export interface IRootState {
-  gridSize: Option<number>;
-  camPos: CamPosition;
+  gridSize: IOption<number>;
+  camPos: ICamPosition;
   track: {
-    items: MapBaseItem[];
-    addingItem: AddingItem | null;
+    items: IMapBaseItem[];
+    addingItem: IAddingItem | null;
   };
 }
 

@@ -1,5 +1,5 @@
 import { MouseMoveHelper } from "./MouseMoveHelper";
-import { Point } from "../components/shared/Point";
+import { IPoint } from "../components/shared/IPoint";
 
 const dragStartDistance = 5;
 
@@ -9,7 +9,7 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
 
   protected abstract getTarget(): HTMLElement;
 
-  protected onPointerMove(mousePos: Point, delta: Point) {
+  protected onPointerMove(mousePos: IPoint, delta: IPoint) {
     if (
       !this.draggingStarted &&
       this.startMousePos &&
@@ -30,7 +30,7 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
     }
   }
 
-  private startDragging(mousePos: Point) {
+  private startDragging(mousePos: IPoint) {
     this.draggingStarted = true;
 
     this.onDraggingStarted(mousePos);
@@ -38,9 +38,9 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
     this.target = this.getTarget();
   }
 
-  protected abstract onDraggingStarted(mousePos: Point): void;
+  protected abstract onDraggingStarted(mousePos: IPoint): void;
 
-  private updateDragging(mousePos: Point) {
+  private updateDragging(mousePos: IPoint) {
     if (this.target) {
       const rect = this.target.getBoundingClientRect();
       if (
@@ -60,8 +60,8 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
     this.onDraggingOutsideTarget(mousePos);
   }
 
-  protected abstract onDraggingOutsideTarget(mousePos: Point): void;
-  protected abstract onDraggingInsideTarget(mousePos: Point): void;
+  protected abstract onDraggingOutsideTarget(mousePos: IPoint): void;
+  protected abstract onDraggingInsideTarget(mousePos: IPoint): void;
 
   private endDragging() {
     this.draggingStarted = false;
