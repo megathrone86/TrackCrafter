@@ -31,13 +31,13 @@ export class MapElementDragHelper extends MouseDragHelper {
       super.onPointerUp(e);
     } else {
       if (e.target === this.viewportRef.current) {
-        this.updateSelection();
+        this.updateSelection(e);
       }
     }
   }
 
-  private updateSelection() {
-    this.dispatch(setSelection(this.model));
+  private updateSelection(e: PointerEvent) {
+    this.dispatch(setSelection({ item: this.model, isAdditive: e.ctrlKey }));
   }
 
   protected onDraggingStarted(mousePos: Point) {

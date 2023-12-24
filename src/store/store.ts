@@ -2,6 +2,7 @@ import {
   createReducer,
   configureStore,
   combineReducers,
+  current,
 } from "@reduxjs/toolkit";
 
 import { TrackElementModel } from "../models/TrackElementModel";
@@ -60,14 +61,21 @@ const reducer = combineReducers({
       );
     }),
     selection: createReducer(preloadedState.track.selection, (builder) => {
-      builder.addCase(setSelection, (_, action) => {
-        const selection = [action.payload];
-
-        //TODO: добавить поддержку выделения по ctrl и shift
-        // if (prevValue.includes(this.element))
+      builder.addCase(setSelection, (prevValue, action) => {
+        const item = action.payload.item;
 
         //TODO: добавить поддержку выделения рамкой (на далекое будущее)
-        return selection;
+
+        if (action.payload.isAdditive) {
+          //в prevValue на самом деле будет прокси и includes не будет нормально работать
+          const realPrevValue = current(prevValue);
+
+          return realPrevValue.includes(item)
+            ? realPrevValue.filter((t) => t !== item)
+            : realPrevValue.concat([item]);
+        } else {
+          return [item];
+        }
       });
     }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {

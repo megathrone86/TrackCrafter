@@ -14,4 +14,7 @@ export const setAddingItemMapPosition = createAction<Point>(
   "setAddingItemMapPosition"
 );
 export const addItem = createAction<TrackElementModel>("addItem");
-export const setSelection = createAction<TrackElementModel>("setSelection");
+export const setSelection = createAction<{
+  item: TrackElementModel;
+  isAdditive: boolean;
+}>("setSelection");
