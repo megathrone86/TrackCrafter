@@ -10,6 +10,7 @@ import { gridSizes } from "../consts";
 import { Option } from "../components/shared/Option";
 import {
   addItem,
+  moveItems,
   setAddingItem,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
@@ -59,6 +60,17 @@ const reducer = combineReducers({
       builder.addCase(addItem, (prevValue, action) =>
         prevValue.concat([action.payload])
       );
+      builder.addCase(moveItems, (prevValue, action) =>
+        current(prevValue).map((t) => {
+          const movedItem = action.payload.find((m) => m.item === t);
+          if (movedItem) {
+            console.debug("move item ", t.id);
+            return { ...t, x: movedItem.newPos.x, y: movedItem.newPos.y };
+          } else {
+            return t;
+          }
+        })
+      );
     }),
     selection: createReducer(preloadedState.track.selection, (builder) => {
       builder.addCase(setSelection, (prevValue, action) => {
@@ -67,7 +79,7 @@ const reducer = combineReducers({
         //TODO: добавить поддержку выделения рамкой (на далекое будущее)
 
         if (action.payload.isAdditive) {
-          //в prevValue на самом деле будет прокси и includes не будет нормально работать
+          //внутри редьюсера в prevValue на самом деле будет прокси класс и includes не будет нормально работать
           const realPrevValue = current(prevValue);
 
           return realPrevValue.includes(item)

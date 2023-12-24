@@ -2,13 +2,19 @@ import { Dispatch } from "react";
 import { AnyAction } from "redux";
 import { Point } from "../../shared/Point";
 import { drawAreaClass } from "../DrawArea";
-import { GeometryHelper } from "../GeometryHelper";
 import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
-import { setSelection } from "../../../store/actions";
+import { moveItems, setSelection } from "../../../store/actions";
 import { TrackElementModel } from "../../../models/TrackElementModel";
+import { geometryHelper } from "../GeometryHelper";
+
+interface MovingItem extends Point {
+  item: TrackElementModel;
+}
 
 export class MapElementDragHelper extends MouseDragHelper {
+  movingItemOffsets: MovingItem[] = [];
+
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
@@ -19,7 +25,7 @@ export class MapElementDragHelper extends MouseDragHelper {
 
   protected getTarget() {
     const elements = document.getElementsByClassName(drawAreaClass);
-    return elements[0] as HTMLDivElement;
+    return elements[0] as HTMLElement;
   }
 
   protected onPointerDown(e: React.PointerEvent) {
@@ -41,32 +47,37 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingStarted(mousePos: Point) {
-    // this.dispatch(
-    //   setAddingItem({
-    //     screenPos: mousePos,
-    //     model,
-    //   })
-    // );
+    const selection = store.getState().track.selection;
+
+    this.movingItemOffsets = selection.map((t) => ({
+      item: t,
+      x: t.x - this.model.x,
+      y: t.y - this.model.y,
+    }));
   }
 
   protected onDraggingInsideTarget(mousePos: Point) {
-    const camPos = store.getState().camPos;
-    const gridSize = store.getState().gridSize.value;
-    const helper = new GeometryHelper(camPos, gridSize);
-    const x = helper.screenXToWorld(mousePos.x, true);
-    const y = helper.screenYToWorld(mousePos.y, true);
-    // this.dispatch(setAddingItemMapPosition({ x, y }));
+
+    const worldPos = geometryHelper.mousePosToWord(mousePos, true);
+    this.dispatch(
+      moveItems(
+        this.movingItemOffsets.map((t) => ({
+          item: t.item,
+          newPos: {
+            x: worldPos.x - t.x,
+            y: worldPos.y - t.y,
+          },
+        }))
+      )
+    );
   }
 
-  protected onDraggingOutsideTarget(mousePos: Point) {
-    // this.dispatch(setAddingItemScreenPosition(mousePos));
-  }
+  protected onDraggingOutsideTarget(mousePos: Point) {}
 
-  protected onDraggingFinished() {
-    // const addingItem = store.getState().track.addingItem;
-    // if (addingItem && !addingItem.screenPos) {
-    //   this.dispatch(addItem(addingItem.model));
-    // }
-    // this.dispatch(setAddingItem(null));
+  protected onDraggingFinished() {}
+
+  protected clearAll(e: PointerEvent) {
+    super.clearAll(e);
+    this.movingItemOffsets = [];
   }
 }

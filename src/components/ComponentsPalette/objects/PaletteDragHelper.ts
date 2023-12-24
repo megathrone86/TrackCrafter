@@ -9,9 +9,9 @@ import {
 } from "../../../store/actions";
 import { TrackElementModel } from "../../../models/TrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
-import { GeometryHelper } from "../../DrawArea/GeometryHelper";
 import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
+import { geometryHelper } from "../../DrawArea/GeometryHelper";
 
 export class PaletteDragHelper extends MouseDragHelper {
   constructor(
@@ -24,7 +24,7 @@ export class PaletteDragHelper extends MouseDragHelper {
 
   protected getTarget() {
     const elements = document.getElementsByClassName(drawAreaClass);
-    return elements[0] as HTMLDivElement;
+    return elements[0] as HTMLElement;
   }
 
   protected onDraggingStarted(mousePos: Point) {
@@ -38,12 +38,8 @@ export class PaletteDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: Point) {
-    const camPos = store.getState().camPos;
-    const gridSize = store.getState().gridSize.value;
-    const helper = new GeometryHelper(camPos, gridSize);
-    const x = helper.screenXToWorld(mousePos.x, true);
-    const y = helper.screenYToWorld(mousePos.y, true);
-    this.dispatch(setAddingItemMapPosition({ x, y }));
+    const worldPos = geometryHelper.mousePosToWord(mousePos, true);
+    this.dispatch(setAddingItemMapPosition(worldPos));
   }
 
   protected onDraggingOutsideTarget(mousePos: Point) {

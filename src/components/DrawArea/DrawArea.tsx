@@ -4,11 +4,10 @@ import { IRootState } from "../../store/store";
 import { useEffect, useRef, useState } from "react";
 import { BaseItem } from "./elements/BaseItem/BaseItem";
 import { Point } from "../shared/Point";
-import { GeometryHelper } from "./GeometryHelper";
 import { MapDragHelper } from "./MapDragHelper";
+import { geometryHelper } from "./GeometryHelper";
 
 export const drawAreaClass = "tc-DrawArea";
-export const pixelsToMeterRatio = 100;
 
 //TODO: рассмотреть либу ReactFlow для отрисовки
 
@@ -20,21 +19,18 @@ export function DrawArea() {
 
   const [dragHelper] = useState(new MapDragHelper(dispatch, viewportRef));
 
-  const gridSize = useSelector((state: IRootState) => state.gridSize).value;
   const items = useSelector((state: IRootState) => state.track.items);
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
   const camPos = useSelector((state: IRootState) => state.camPos);
 
   useEffect(() => {
     if (viewportRef.current) {
-      const div = viewportRef.current as HTMLDivElement;
+      const div = viewportRef.current as HTMLElement;
       setViewportSize({ x: div.offsetWidth, y: div.offsetHeight });
     }
   }, []);
 
-  const helper = new GeometryHelper(camPos, gridSize);
-
-  const { columns, rows } = getGrid(helper);
+  const { columns, rows } = getGrid();
 
   return (
     <div
@@ -49,7 +45,7 @@ export function DrawArea() {
             className={getGridLineClassName(
               "tc-DrawArea-gridVerticalLine",
               "tc-DrawArea-gridVerticalLine_major",
-              helper.screenXToWorld(x)
+              geometryHelper.screenXToWorld(x)
             )}
             style={{ left: `${x}px` }}
           ></div>
@@ -60,7 +56,7 @@ export function DrawArea() {
             className={getGridLineClassName(
               "tc-DrawArea-gridHorizontalLine",
               "tc-DrawArea-gridHorizontalLine_major",
-              helper.screenYToWorld(y)
+              geometryHelper.screenYToWorld(y)
             )}
             style={{ top: `${y}px` }}
           ></div>
@@ -87,7 +83,7 @@ export function DrawArea() {
     return Number.isInteger(coordinate) ? `${class1} ${class2}` : class1;
   }
 
-  function getGrid(geometryHelper: GeometryHelper) {
+  function getGrid() {
     const gridCellSize = geometryHelper.getGridCellSize();
     const gridColumnsStart =
       Math.trunc(camPos.x / gridCellSize) * gridCellSize -

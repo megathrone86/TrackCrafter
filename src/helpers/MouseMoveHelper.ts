@@ -10,7 +10,7 @@ export abstract class MouseMoveHelper {
 
   public handlePointerDown(e: React.PointerEvent) {
     if (this.viewportRef.current) {
-      const element = this.viewportRef.current as HTMLDivElement;
+      const element = this.viewportRef.current as HTMLElement;
       element.setPointerCapture(e.pointerId);
 
       this.startMousePos = { x: e.clientX, y: e.clientY };
@@ -50,7 +50,7 @@ export abstract class MouseMoveHelper {
     this.startMousePos = null;
 
     if (this.viewportRef.current) {
-      const element = this.viewportRef.current as HTMLDivElement;
+      const element = this.viewportRef.current as HTMLElement;
       element.releasePointerCapture(e.pointerId);
     }
   }

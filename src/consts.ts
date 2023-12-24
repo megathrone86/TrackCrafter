@@ -6,3 +6,5 @@ export const gridSizes: Option<number>[] = [
   getOptionFromNumber(0.2),
   getOptionFromNumber(0.1),
 ];
+
+export const pixelsToMeterRatio = 100;

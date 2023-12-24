@@ -18,3 +18,5 @@ export const setSelection = createAction<{
   item: TrackElementModel;
   isAdditive: boolean;
 }>("setSelection");
+export const moveItems =
+  createAction<{ item: TrackElementModel; newPos: Point }[]>("moveItems");

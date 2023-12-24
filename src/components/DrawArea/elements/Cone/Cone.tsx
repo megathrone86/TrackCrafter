@@ -3,9 +3,9 @@ import "./Cone.scss";
 import { ITrackElementProps } from "../IModelProps";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../../../store/store";
-import { pixelsToMeterRatio } from "../../DrawArea";
 import { MapElementDragHelper } from "../MapElementDragHelper";
 import { useRef, useState } from "react";
+import { pixelsToMeterRatio } from "../../../../consts";
 
 export function Cone(props: ITrackElementProps<ConeModel>) {
   const dispatch = useDispatch();
