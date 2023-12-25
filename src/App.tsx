@@ -5,10 +5,19 @@ import { DrawArea } from "./components/DrawArea/DrawArea";
 import { useSelector } from "react-redux";
 import { IRootState } from "./store/store";
 import { BaseItem } from "./components/DrawArea/elements/BaseItem/BaseItem";
-import { CSSProperties } from "react";
+import { CSSProperties, useEffect } from "react";
+import React from "react";
+import { dialogService } from "./services/DialogService";
 
 export function App() {
+  const [dialogs, setDialogs] = React.useState(dialogService.dialogs);
+
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
+
+  useEffect(() => {
+    dialogService.subscribe((val) => setDialogs(val));
+    return () => dialogService.clearSubscription();
+  }, []);
 
   return (
     <div className="tc-App">
@@ -23,6 +32,15 @@ export function App() {
           <BaseItem item={addingItem}></BaseItem>
         </div>
       )}
+
+      {/* //TODO: вынести в отдельный класс для отрисовки диалога */}
+      {dialogs.map((dialog, i) => (
+        <div className="tc-App-dialog" key={i}>
+          <div className="tc-App-dialog-body">
+            {dialog.component(dialog.props)}
+          </div>
+        </div>
+      ))}
     </div>
   );
 

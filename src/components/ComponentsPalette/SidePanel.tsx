@@ -9,6 +9,11 @@ import { ConeColor, createConeModel } from "../../models/IConeModel";
 import { TreeItem } from "./TreeItem";
 import { IconButton } from "../shared/IconButton/IconButton";
 import { RadioButtons } from "../shared/RadioButtons/RadioButtons";
+import { dialogService } from "../../services/DialogService";
+import {
+  ConfirmDialog,
+  IConfirmDialogProps,
+} from "../dialogs/ConfirmDialog/ConfirmDialog";
 
 const redConeModel = createConeModel(ConeColor.Red);
 const blueConeModel = createConeModel(ConeColor.Blue);
@@ -78,14 +83,9 @@ export function SidePanel() {
   function removeSelection() {
     const selectedItems = items.filter((t) => t.selected);
 
-    //TODO: заменить на нормальный диалог
-    if (
-      // eslint-disable-next-line no-restricted-globals
-      confirm(
-        `Вы уверен, что хотите удалить ${selectedItems.length} элементов?`
-      )
-    ) {
-      dispatch(deleteItems(selectedItems));
-    }
+    dialogService.openDialog<IConfirmDialogProps>(ConfirmDialog, {
+      message: `Вы уверены, что хотите удалить ${selectedItems.length} элементов?`,
+      onOk: () => dispatch(deleteItems(selectedItems)),
+    });
   }
 }
