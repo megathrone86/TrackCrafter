@@ -3,8 +3,19 @@ import { IOption } from "../components/shared/IOption";
 import { IPoint } from "../components/shared/IPoint";
 import { IAddingItem, ICamPosition, IMapBaseItem } from "./store";
 
+interface ISetSelectionPayload {
+  item: IMapBaseItem;
+  switchMode: boolean;
+  additiveMode: boolean;
+}
+interface IMoveItemsPayload {
+  item: IMapBaseItem;
+  newPos: IPoint;
+}
+
 export const setCamPos = createAction<ICamPosition>("setCamPos");
 export const setGridSize = createAction<IOption<number>>("setGridSize");
+export const setFileName = createAction<string>("setFileName");
 export const setAddingItem = createAction<IAddingItem | null>("setAddingItem");
 export const setAddingItemScreenPosition = createAction<IPoint>(
   "setAddingItemScreenPosition"
@@ -13,12 +24,8 @@ export const setAddingItemMapPosition = createAction<IPoint>(
   "setAddingItemMapPosition"
 );
 export const addItem = createAction<IMapBaseItem>("addItem");
-export const setSelection = createAction<{
-  item: IMapBaseItem;
-  switchMode: boolean;
-  additiveMode: boolean;
-}>("setSelection");
+export const setSelection = createAction<ISetSelectionPayload>("setSelection");
 export const setSelectedAll = createAction("setSelectedAll");
-export const moveItems =
-  createAction<{ item: IMapBaseItem; newPos: IPoint }[]>("moveItems");
+export const moveItems = createAction<IMoveItemsPayload[]>("moveItems");
 export const deleteItems = createAction<IMapBaseItem[]>("deleteItems");
+export const replaceItems = createAction<IMapBaseItem[]>("replaceItems");

@@ -12,10 +12,12 @@ import {
   addItem,
   deleteItems,
   moveItems,
+  replaceItems,
   setAddingItem,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
   setCamPos,
+  setFileName,
   setGridSize,
   setSelectedAll,
   setSelection,
@@ -44,6 +46,7 @@ export interface IRootState {
   gridSize: IOption<number>;
   camPos: ICamPosition;
   track: {
+    fileName: string;
     items: IMapBaseItem[];
     addingItem: IAddingItem | null;
   };
@@ -53,6 +56,7 @@ const preloadedState: IRootState = {
   camPos: { x: 0, y: 0 },
   gridSize: gridSizes[3],
   track: {
+    fileName: "",
     items: [],
     addingItem: null,
   },
@@ -66,12 +70,16 @@ const reducer = combineReducers({
     builder.addCase(setGridSize, (_, action) => action.payload);
   }),
   track: combineReducers({
+    fileName: createReducer(preloadedState.track.fileName, (builder) => {
+      builder.addCase(setFileName, (_, action) => action.payload);
+    }),
     items: createReducer(preloadedState.track.items, (builder) => {
       builder.addCase(addItem, (prevValue, action) =>
         current(prevValue)
           .map((t) => ({ ...t, selected: false }))
           .concat([{ ...action.payload, selected: true }])
       );
+      builder.addCase(replaceItems, (_, action) => action.payload);
       builder.addCase(setSelectedAll, (prevValue, _) =>
         current(prevValue).map((t) => ({ ...t, selected: true }))
       );
