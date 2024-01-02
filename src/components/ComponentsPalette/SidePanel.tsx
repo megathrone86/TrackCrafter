@@ -9,11 +9,7 @@ import { ConeColor, createConeModel } from "../../models/IConeModel";
 import { TreeItem } from "./TreeItem";
 import { IconButton } from "../shared/IconButton/IconButton";
 import { RadioButtons } from "../shared/RadioButtons/RadioButtons";
-import { dialogService } from "../../services/DialogService";
-import {
-  ConfirmDialog,
-  IConfirmDialogProps,
-} from "../dialogs/ConfirmDialog/ConfirmDialog";
+import { showConfirm } from "../dialogs/ConfirmDialog/ConfirmDialog";
 
 const redConeModel = createConeModel(ConeColor.Red);
 const blueConeModel = createConeModel(ConeColor.Blue);
@@ -43,13 +39,13 @@ export function SidePanel() {
             icon="fi-rs-list-check"
             hint="Выделить все"
             enabled={canSelectAll}
-            onClick={selectAll}
+            onClick={handleSelectAllClick}
           />
           <IconButton
             icon="fi-rs-trash"
             hint="Удалить выделенное"
             enabled={canRemoveSelection}
-            onClick={removeSelection}
+            onClick={handleRemoveSelectionClick}
           />
         </div>
       </div>
@@ -73,19 +69,21 @@ export function SidePanel() {
   function canSelectAll() {
     return items.some((t) => !t.selected);
   }
-  function selectAll() {
+  function handleSelectAllClick() {
     dispatch(setSelectedAll());
   }
 
   function canRemoveSelection() {
     return items.some((t) => t.selected);
   }
-  function removeSelection() {
+  async function handleRemoveSelectionClick() {
     const selectedItems = items.filter((t) => t.selected);
 
-    dialogService.openDialog<IConfirmDialogProps>(ConfirmDialog, {
-      message: `Вы уверены, что хотите удалить ${selectedItems.length} элементов?`,
-      onOk: () => dispatch(deleteItems(selectedItems)),
-    });
+    const ret = await showConfirm(
+      `Вы уверены, что хотите удалить ${selectedItems.length} элементов?`
+    );
+    if (ret) {
+      dispatch(deleteItems(selectedItems));
+    }
   }
 }

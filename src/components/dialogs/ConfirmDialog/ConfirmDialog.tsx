@@ -3,7 +3,6 @@ import "./ConfirmDialog.scss";
 
 export interface IConfirmDialogProps {
   message: string;
-  onOk: () => void;
 }
 
 export function ConfirmDialog(props: IConfirmDialogProps) {
@@ -19,11 +18,16 @@ export function ConfirmDialog(props: IConfirmDialogProps) {
   );
 
   function handleOkClick(): void {
-    props.onOk();
-    dialogService.closeLastDialog();
+    dialogService.closeDialog(props, true);
   }
 
   function handleCancelClick(): void {
-    dialogService.closeLastDialog();
+    dialogService.closeDialog(props, false);
   }
+}
+
+export function showConfirm(message: string) {
+  return dialogService.openDialog<IConfirmDialogProps, boolean>(ConfirmDialog, {
+    message,
+  });
 }

@@ -1,4 +1,7 @@
 import "./App.scss";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 import { MainMenu } from "./components/MainMenu/MainMenu";
 import { SidePanel } from "./components/ComponentsPalette/SidePanel";
 import { DrawArea } from "./components/DrawArea/DrawArea";
@@ -41,6 +44,7 @@ export function App() {
           </div>
         </div>
       ))}
+      <ToastContainer />
     </div>
   );
 

@@ -2,24 +2,15 @@ import "ultimate-react-multilevel-menu/dist/esm/index.css";
 
 import "./MainMenu.scss";
 
-import {
-  Nav,
-  Collapse,
-  Item,
-  Items,
-  Logo,
-} from "ultimate-react-multilevel-menu";
+import { Nav, Collapse, Item, Items } from "ultimate-react-multilevel-menu";
 import { useDispatch, useSelector } from "react-redux";
 import { IMapBaseItem, IRootState } from "../../store/store";
 import { importExportService } from "../../services/ImportExportService";
 import { replaceItems, setFileName } from "../../store/actions";
-import { dialogService } from "../../services/DialogService";
-import {
-  ConfirmDialog,
-  IConfirmDialogProps,
-} from "../dialogs/ConfirmDialog/ConfirmDialog";
+import { showConfirm } from "../dialogs/ConfirmDialog/ConfirmDialog";
 import { createUid } from "../../helpers/bl-helper";
-import { OpenFileData, fileService } from "../../services/FileService";
+import { fileService } from "../../services/FileService";
+import { toastService } from "../../services/ToastService";
 
 export function MainMenu() {
   const dispatch = useDispatch();
@@ -35,16 +26,16 @@ export function MainMenu() {
         {/* <Logo href="/">Logo</Logo> */}
         <Collapse>
           <Items title="Файл">
-            <Item onClick={newFile}>Создать</Item>
-            <Item onClick={openFile}>Открыть</Item>
+            <Item onClick={handleNewFileClick}>Создать</Item>
+            <Item onClick={handleOpenFileClick}>Открыть</Item>
             {isFileDialogEnabled ? (
-              <Item onClick={saveFile}>Сохранить</Item>
+              <Item onClick={handleSaveFileClick}>Сохранить</Item>
             ) : (
               <Item className="disabled">
                 Сохранить (не поддерживается в этом браузере)
               </Item>
             )}
-            <Item onClick={downloadFile}>Скачать</Item>
+            <Item onClick={handleDownloadFileClick}>Скачать</Item>
           </Items>
           <Items title="Инфо">
             <Item>Открыть тестовый проект</Item>
@@ -55,56 +46,70 @@ export function MainMenu() {
     </div>
   );
 
-  function newFile() {
-    const currentItemsLength = items.length;
-    if (currentItemsLength > 0) {
-      dialogService.openDialog<IConfirmDialogProps>(ConfirmDialog, {
-        message: `Карта не пуста. Вы уверены, что хотите удалить ${currentItemsLength} элементов?`,
-        onOk: () => clearEditor(),
-      });
-    } else {
-      clearEditor();
-    }
-  }
-
-  function clearEditor() {
-    dispatch(replaceItems([]));
-    dispatch(setFileName(""));
-  }
-
-  async function openFile() {
-    const fileData = await fileService.openFile();
-    if (fileData) {
+  async function handleNewFileClick() {
+    try {
       const currentItemsLength = items.length;
       if (currentItemsLength > 0) {
-        dialogService.openDialog<IConfirmDialogProps>(ConfirmDialog, {
-          message: `Карта не пуста. Вы уверены, что хотите удалить ${currentItemsLength} элементов?`,
-          onOk: async () => applyFile(fileData),
-        });
-      } else {
-        applyFile(fileData);
+        const ret = await showConfirm(
+          `Карта не пуста. Вы уверены, что хотите удалить ${currentItemsLength} элементов?`
+        );
+        if (!ret) return;
       }
+      dispatch(replaceItems([]));
+      dispatch(setFileName(""));
+      toastService.info("Редактор очищен");
+    } catch (e) {
+      console.error(e);
     }
   }
 
-  function applyFile(fileData: OpenFileData<string>) {
-    const elements = importExportService.import(fileData.content);
-    const mapElements: IMapBaseItem[] = elements.map((t) => ({
-      model: t,
-      selected: false,
-      uid: createUid(),
-    }));
-    dispatch(replaceItems(mapElements));
-    dispatch(setFileName(fileData.fileName));
+  async function handleOpenFileClick() {
+    try {
+      const fileData = await fileService.openFile();
+      if (fileData) {
+        const currentItemsLength = items.length;
+        if (currentItemsLength > 0) {
+          const ret = await showConfirm(
+            `Карта не пуста. Вы уверены, что хотите удалить ${currentItemsLength} элементов?`
+          );
+          if (!ret) return;
+        }
+
+        const elements = importExportService.import(fileData.content);
+        const mapElements: IMapBaseItem[] = elements.map((t) => ({
+          model: t,
+          selected: false,
+          uid: createUid(),
+        }));
+        dispatch(replaceItems(mapElements));
+        dispatch(setFileName(fileData.fileName));
+      }
+      toastService.info("Файл открыт");
+    } catch (e) {
+      toastService.error("Ошибка открытия");
+      console.error(e);
+    }
   }
 
-  function saveFile() {
-    const json = importExportService.export(items.map((t) => t.model));
-    fileService.saveFile(json, fileName);
+  async function handleSaveFileClick() {
+    try {
+      const json = importExportService.export(items.map((t) => t.model));
+      await fileService.saveFile(json, fileName);
+      toastService.info("Файл сохранен");
+    } catch (e) {
+      toastService.error("Ошибка сохранения");
+      console.error(e);
+    }
   }
 
-  function downloadFile() {
-    const json = importExportService.export(items.map((t) => t.model));
-    fileService.forceFileDownload(json);
+  function handleDownloadFileClick() {
+    try {
+      const json = importExportService.export(items.map((t) => t.model));
+      fileService.forceFileDownload(json);
+      toastService.info("Файл скачан");
+    } catch (e) {
+      toastService.error("Ошибка скачивания");
+      console.error(e);
+    }
   }
 }
