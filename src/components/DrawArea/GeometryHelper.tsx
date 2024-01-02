@@ -10,6 +10,7 @@ export interface IGeometryHelperParams {
 export class GeometryHelper {
   constructor(private params: IGeometryHelperParams) {}
 
+  //Размер ячейки в пикселях
   public getGridCellSize() {
     return pixelsToMeterRatio * this.params.gridSize;
   }

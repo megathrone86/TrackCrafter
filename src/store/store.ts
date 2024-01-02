@@ -54,7 +54,7 @@ export interface IRootState {
 
 const preloadedState: IRootState = {
   camPos: { x: 0, y: 0 },
-  gridSize: gridSizes[3],
+  gridSize: gridSizes[2],
   track: {
     fileName: "",
     items: [],

@@ -11,8 +11,12 @@ import { IconButton } from "../shared/IconButton/IconButton";
 import { RadioButtons } from "../shared/RadioButtons/RadioButtons";
 import { showConfirm } from "../dialogs/ConfirmDialog/ConfirmDialog";
 
+const orangeConeModel = createConeModel(ConeColor.Orange);
 const redConeModel = createConeModel(ConeColor.Red);
 const blueConeModel = createConeModel(ConeColor.Blue);
+const yellowConeModel = createConeModel(ConeColor.Yellow);
+const redYellowConeModel = createConeModel(ConeColor.RedYellow);
+const blueYellowConeModel = createConeModel(ConeColor.BlueYellow);
 
 export function SidePanel() {
   const dispatch = useDispatch();
@@ -53,8 +57,18 @@ export function SidePanel() {
         <p>Создание компонентов</p>
 
         <div className="tc-SidePanel-componentsList">
+          <Cone title="Оранжевый конус" prototypeModel={orangeConeModel}></Cone>
           <Cone title="Красный конус" prototypeModel={redConeModel}></Cone>
           <Cone title="Синий конус" prototypeModel={blueConeModel}></Cone>
+          <Cone title="Желтый конус" prototypeModel={yellowConeModel}></Cone>
+          <Cone
+            title="Красно-желтый конус"
+            prototypeModel={redYellowConeModel}
+          ></Cone>
+          <Cone
+            title="Сине-желтый конус"
+            prototypeModel={blueYellowConeModel}
+          ></Cone>
         </div>
       </div>
       <div className="tc-SidePanel-tree">

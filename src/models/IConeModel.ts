@@ -8,6 +8,9 @@ export enum ConeColor {
   Red = "Red",
   Blue = "Blue",
   Yellow = "Yellow",
+  Orange = "Orange",
+  RedYellow = "RedYellow",
+  BlueYellow = "BlueYellow",
 }
 
 export interface IConeModel extends ITrackElementModel {

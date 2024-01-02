@@ -1,21 +1,41 @@
 .tc-DrawArea-Cone {
     position: absolute;
+    width: 26px;
+    height: 26px;
 
-    .tc-DrawArea-Cone-circle {
-        margin: 1px;
-        width: 26px;
-        height: 26px;
-        border-radius: 13px;
-    }
-
-    .tc-DrawArea-Cone-circle-selection {
+    .tc-DrawArea-Cone-root {
         position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
+        margin-left: -50%;
+        margin-top: -50%;
         width: 100%;
         height: 100%;
-        border-radius: 14px;
+
+        .tc-DrawArea-Cone-circle {
+            position: absolute;
+            border-radius: 50%;
+            left: 2px;
+            top: 2px;
+            right: 2px;
+            bottom: 2px;
+            border: 1px solid #aaa;
+
+            .tc-DrawArea-Cone-inner-circle {
+                position: absolute;
+                width: 50%;
+                height: 50%;
+                border-radius: 50%;
+                margin: 25%;
+                pointer-events: none;
+            }
+        }
+
+        .tc-DrawArea-Cone-circle-selection {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            right: 1px;
+            bottom: 1px;
+            border-radius: 50%;
+        }
     }
 }

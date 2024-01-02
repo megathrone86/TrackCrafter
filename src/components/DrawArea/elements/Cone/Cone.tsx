@@ -20,6 +20,8 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
     useSelector(geometryHelperSelector.selector, geometryHelperSelector.equlity)
   );
 
+  const coneWidth = geometryHelper.getGridCellSize() * 2;
+
   const dragHelper = new MapElementDragHelper(
     dispatch,
     viewportRef,
@@ -31,6 +33,9 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
 
   const isSelected = props.item.selected;
 
+  const color = GetConeColor(props.item.model.color);
+  const color2 = GetConeColor2(props.item.model.color);
+
   return (
     <div
       className="tc-DrawArea-Cone"
@@ -38,35 +43,64 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
       ref={viewportRef}
       onPointerDown={(e) => dragHelper.handlePointerDown(e)}
     >
-      <div
-        className="tc-DrawArea-Cone-circle"
-        style={{ background: GetConeColor(props.item.model) }}
-      ></div>
-      {isSelected && (
-        <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-selection"></div>
-      )}
+      <div className="tc-DrawArea-Cone-root">
+        <div className="tc-DrawArea-Cone-circle" style={{ background: color }}>
+          {color2 && (
+            <div
+              className="tc-DrawArea-Cone-inner-circle"
+              style={{ background: color2 }}
+            ></div>
+          )}
+        </div>
+        {isSelected && (
+          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-selection"></div>
+        )}
+      </div>
     </div>
   );
 
   function getStyle() {
+    let ret = {
+      width: `${coneWidth}px`,
+      height: `${coneWidth}px`,
+    };
+
     const isScreenPositioned =
       addingItem?.screenPos && props.item.model === addingItem.model;
     if (!isScreenPositioned) {
       return {
+        ...ret,
         left: props.item.model.x * pixelsToMeterRatio - camPos.x + "px",
         top: props.item.model.y * pixelsToMeterRatio - camPos.y + "px",
       };
+    } else {
+      return ret;
     }
   }
 }
 
-export function GetConeColor(model: IConeModel) {
-  switch (model.color) {
+export function GetConeColor(color: ConeColor) {
+  switch (color) {
     case ConeColor.Red:
+      return "#ff0000";
+    case ConeColor.RedYellow:
       return "#ff0000";
     case ConeColor.Blue:
       return "#0000ff";
+    case ConeColor.BlueYellow:
+      return "#0000ff";
     case ConeColor.Yellow:
-      return "#ff00ff";
+      return "#ffe25a";
+    case ConeColor.Orange:
+      return "#ff8a09";
+  }
+}
+
+export function GetConeColor2(color: ConeColor) {
+  switch (color) {
+    case ConeColor.RedYellow:
+      return GetConeColor(ConeColor.Yellow);
+    case ConeColor.BlueYellow:
+      return GetConeColor(ConeColor.Yellow);
   }
 }

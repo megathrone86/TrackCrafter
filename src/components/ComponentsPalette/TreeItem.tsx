@@ -4,6 +4,7 @@ import { TrackElementType } from "../../models/ITrackElementModel";
 import { IBaseTrackElementProps } from "../DrawArea/elements/IModelProps";
 import "./TreeItem.scss";
 import { setSelection } from "../../store/actions";
+import { GetConeColor } from "../DrawArea/elements/Cone/Cone";
 
 export function TreeItem(props: IBaseTrackElementProps) {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export function TreeItem(props: IBaseTrackElementProps) {
     return (
       <div
         className={"tc-TreeItem " + getClassName()}
-        style={{ color: model.color }}
+        style={{ color: GetConeColor(model.color) }}
         onClick={handleClick}
       >
         Конус {model.id}

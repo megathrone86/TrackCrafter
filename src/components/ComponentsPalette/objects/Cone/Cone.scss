@@ -1,8 +1,18 @@
-.tc-Palette-Cone {   
+.tc-Palette-Cone {
 
     .tc-Palette-Cone-circle {
         width: 26px;
         height: 26px;
         border-radius: 13px;
+        position: relative;
+
+        .tc-Palette-Cone-inner-circle {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            border-radius: 50%;
+            margin: 25%;
+            pointer-events: none;
+        }
     }
 }
