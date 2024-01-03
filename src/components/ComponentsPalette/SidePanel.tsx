@@ -1,6 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../store/store";
-import { deleteItems, setGridSize, setSelectedAll } from "../../store/actions";
+import {
+  addItem,
+  deleteItems,
+  setGridSize,
+  setSelectedAll,
+} from "../../store/actions";
 import { gridSizes } from "../../consts";
 
 import "./SidePanel.scss";
@@ -10,6 +15,8 @@ import { TreeItem } from "./TreeItem";
 import { IconButton } from "../shared/IconButton/IconButton";
 import { RadioButtons } from "../shared/RadioButtons/RadioButtons";
 import { showConfirm } from "../dialogs/ConfirmDialog/ConfirmDialog";
+import { ILineModel, createLineModel } from "../../models/ILineModel";
+import { TrackElementType } from "../../models/ITrackElementModel";
 
 const orangeConeModel = createConeModel(ConeColor.Orange);
 const redConeModel = createConeModel(ConeColor.Red);
@@ -50,6 +57,12 @@ export function SidePanel() {
             hint="Удалить выделенное"
             enabled={canRemoveSelection}
             onClick={handleRemoveSelectionClick}
+          />
+          <IconButton
+            icon="fi-rs-chart-connected"
+            hint="Соединить линией"
+            enabled={canAddLine}
+            onClick={handleAddLineClick}
           />
         </div>
       </div>
@@ -99,5 +112,37 @@ export function SidePanel() {
     if (ret) {
       dispatch(deleteItems(selectedItems));
     }
+  }
+
+  function canAddLine() {
+    const selectedItems = items.filter((t) => t.selected);
+
+    return (
+      selectedItems.length === 2 &&
+      !items.some(
+        (t) =>
+          t.model.type === TrackElementType.Line &&
+          isConnected(t.model as ILineModel)
+      )
+    );
+
+    function isConnected(lineModel: ILineModel) {
+      return (
+        (lineModel.startUid === selectedItems[0].model.uid &&
+          lineModel.endUid === selectedItems[1].model.uid) ||
+        (lineModel.startUid === selectedItems[1].model.uid &&
+          lineModel.endUid === selectedItems[0].model.uid)
+      );
+    }
+  }
+  async function handleAddLineClick() {
+    const selectedItems = items.filter((t) => t.selected);
+
+    dispatch(
+      addItem({
+        model: createLineModel(selectedItems[0].model, selectedItems[1].model),
+        selected: false,
+      })
+    );
   }
 }

@@ -3,6 +3,7 @@ export interface OpenFileData<T> {
   content: T;
 }
 
+//Сервис для работы с файлами (открыть, сохранить, скачать)
 class FileService {
   //Доступно ли новое API с диалогом сохранения файла
   public isFileDialogEnabled() {

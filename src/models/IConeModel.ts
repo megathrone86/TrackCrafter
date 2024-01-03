@@ -1,4 +1,4 @@
-import { createNewItemId } from "../helpers/bl-helper";
+import { createNewItemId, createUid } from "../helpers/bl-helper";
 import {
   TrackElementModel as ITrackElementModel,
   TrackElementType,
@@ -24,5 +24,6 @@ export function createConeModel(color: ConeColor): IConeModel {
     x: 0,
     y: 0,
     id: createNewItemId(),
+    uid: createUid(),
   };
 }

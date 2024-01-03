@@ -23,6 +23,7 @@ import {
   setSelection,
 } from "./actions";
 import { IPoint } from "../components/shared/IPoint";
+import { trackService } from "../services/TrackService";
 
 export interface IAddingItem extends IMapItem<ITrackElementModel> {
   screenPos?: IPoint;
@@ -34,7 +35,6 @@ export interface IMapItem<T> {
   model: T;
 
   //временные свойства, используемые для работы
-  uid: string;
   selected: boolean;
 }
 
@@ -84,48 +84,13 @@ const reducer = combineReducers({
         current(prevValue).map((t) => ({ ...t, selected: true }))
       );
       builder.addCase(deleteItems, (prevValue, action) =>
-        current(prevValue).filter((t) => !action.payload.includes(t))
+        trackService.remove(current(prevValue), action.payload)
       );
-      builder.addCase(setSelection, (prevValue, action) => {
-        const items = current(prevValue);
-        if (action.payload.additiveMode) {
-          return items.map((t) => {
-            if (action.payload.item.model === t.model) {
-              return { ...t, selected: true };
-            } else {
-              return t;
-            }
-          });
-        } else if (action.payload.switchMode) {
-          return items.map((t) => {
-            if (action.payload.item.model === t.model) {
-              return { ...t, selected: !t.selected };
-            } else {
-              return t;
-            }
-          });
-        } else {
-          return items.map((t) => {
-            return { ...t, selected: action.payload.item.model === t.model };
-          });
-        }
-      });
+      builder.addCase(setSelection, (prevValue, action) =>
+        trackService.setSelection(current(prevValue), action.payload)
+      );
       builder.addCase(moveItems, (prevValue, action) =>
-        current(prevValue).map((t) => {
-          const movedItem = action.payload.find((m) => m.item.uid === t.uid);
-          if (movedItem) {
-            return {
-              ...t,
-              model: {
-                ...t.model,
-                x: movedItem.newPos.x,
-                y: movedItem.newPos.y,
-              },
-            };
-          } else {
-            return t;
-          }
-        })
+        trackService.moveItems(current(prevValue), action.payload)
       );
     }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {

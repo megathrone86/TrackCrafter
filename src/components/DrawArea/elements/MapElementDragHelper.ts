@@ -19,7 +19,8 @@ export class MapElementDragHelper extends MouseDragHelper {
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
     private item: IMapBaseItem,
-    private geometryHelper: GeometryHelper
+    private geometryHelper: GeometryHelper,
+    private canDrag = true
   ) {
     super(viewportRef);
   }
@@ -55,6 +56,8 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingStarted(mousePos: IPoint) {
+    if (!this.canDrag) return;
+
     const selection = store.getState().track.items.filter((t) => t.selected);
 
     this.movingItemOffsets = selection.map((t) => ({
@@ -67,6 +70,8 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: IPoint) {
+    if (!this.canDrag) return;
+
     const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     const movedItems = this.movingItemOffsets.map((t) => ({
       item: t.item,

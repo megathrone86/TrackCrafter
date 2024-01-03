@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 
+//Сервис-прослойка для работы с всплывающими сообщениями
 class ToastService {
   public info(msg: string) {
     toast(msg, { hideProgressBar: true });

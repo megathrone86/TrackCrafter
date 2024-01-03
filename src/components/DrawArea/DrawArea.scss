@@ -38,25 +38,74 @@
         }
     }
 
-    .tc-DrawArea-selection {
-        animation: rotate 5s infinite, color_change 1s infinite;
+    .tc-DrawArea-circle-selection {
+        animation: circle_rotate 5s infinite linear, circle_color_change 1s infinite linear;
         border-width: 3px;
         border-style: dashed;
 
-        @keyframes rotate {
+        @keyframes circle_rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
             100% {
-                transform: rotate(180deg);
+                transform: rotate(360deg);
             }
         }
 
-        @keyframes color_change {
+        @keyframes circle_color_change {
             0% {
-                border-color: yellow;
+                border-color: red;
+            }
+
+            49% {
+                border-color: red;
+            }
+
+            50% {
+                border-color: purple;
             }
 
             100% {
-                border-color: purple;
+                stroke: purple;
             }
         }
     }
+
+    .tc-DrawArea-line-selection {
+        animation: stroke_move_change 0.4s infinite linear, line_color_change 1s infinite linear;
+        border-width: 5px;
+        border-style: dashed;
+        stroke-dasharray: 10;
+
+        @keyframes stroke_move_change {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: 10;
+            }
+        }
+
+        @keyframes line_color_change {
+            0% {
+                stroke: red;
+            }
+
+            49% {
+                stroke: red;
+            }
+
+            50% {
+                stroke: purple;
+            }
+
+            100% {
+                stroke: purple;
+            }
+        }
+    }
+
+
 }

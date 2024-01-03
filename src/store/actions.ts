@@ -3,12 +3,12 @@ import { IOption } from "../components/shared/IOption";
 import { IPoint } from "../components/shared/IPoint";
 import { IAddingItem, ICamPosition, IMapBaseItem } from "./store";
 
-interface ISetSelectionPayload {
+export interface ISetSelectionPayload {
   item: IMapBaseItem;
   switchMode: boolean;
   additiveMode: boolean;
 }
-interface IMoveItemsPayload {
+export interface IMoveItemsPayload {
   item: IMapBaseItem;
   newPos: IPoint;
 }

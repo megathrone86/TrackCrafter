@@ -1,11 +1,11 @@
-import { ConeColor, IConeModel } from "../../../../models/IConeModel";
 import "./Cone.scss";
+
+import { ConeColor, IConeModel } from "../../../../models/IConeModel";
 import { ITrackElementProps } from "../IModelProps";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../../../store/store";
 import { MapElementDragHelper } from "../MapElementDragHelper";
 import { useRef } from "react";
-import { pixelsToMeterRatio } from "../../../../consts";
 import { GeometryHelper } from "../../GeometryHelper";
 import { geometryHelperSelector } from "../../../../store/shared-selectors";
 
@@ -13,8 +13,6 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
   const dispatch = useDispatch();
 
   const viewportRef = useRef(null);
-
-  const camPos = useSelector((state: IRootState) => state.camPos);
 
   const geometryHelper = new GeometryHelper(
     useSelector(geometryHelperSelector.selector, geometryHelperSelector.equlity)
@@ -53,7 +51,7 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
           )}
         </div>
         {isSelected && (
-          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-selection"></div>
+          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-circle-selection"></div>
         )}
       </div>
     </div>
@@ -70,8 +68,8 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
     if (!isScreenPositioned) {
       return {
         ...ret,
-        left: props.item.model.x * pixelsToMeterRatio - camPos.x + "px",
-        top: props.item.model.y * pixelsToMeterRatio - camPos.y + "px",
+        left: geometryHelper.worldXToScreen(props.item.model.x) + "px",
+        top: geometryHelper.worldYToScreen(props.item.model.y) + "px",
       };
     } else {
       return ret;

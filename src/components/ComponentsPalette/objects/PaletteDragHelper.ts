@@ -12,7 +12,6 @@ import { drawAreaClass } from "../../DrawArea/DrawArea";
 import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { GeometryHelper } from "../../DrawArea/GeometryHelper";
-import { createUid } from "../../../helpers/bl-helper";
 
 export class PaletteDragHelper extends MouseDragHelper {
   constructor(
@@ -35,7 +34,6 @@ export class PaletteDragHelper extends MouseDragHelper {
       setAddingItem({
         screenPos: mousePos,
         selected: false,
-        uid: createUid(),
         model,
       })
     );

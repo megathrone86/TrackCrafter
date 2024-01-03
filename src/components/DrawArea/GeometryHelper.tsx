@@ -34,4 +34,11 @@ export class GeometryHelper {
   public roundCoordinateToGrid(coordinate: number) {
     return Math.round(coordinate / this.params.gridSize) * this.params.gridSize;
   }
+
+  public worldXToScreen(worldX: number) {
+    return worldX * pixelsToMeterRatio - this.params.camPos.x;
+  }
+  public worldYToScreen(worldY: number) {
+    return worldY * pixelsToMeterRatio - this.params.camPos.y;
+  }
 }

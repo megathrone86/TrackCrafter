@@ -10,6 +10,7 @@ interface IServiceDialogInfo {
   resolve?: (value?: unknown) => void;
 }
 
+//Сервис для низкоуровневой работы с диалогами
 class DialogService {
   private _dialogs: IServiceDialogInfo[] = [];
   private _onDialogsChange: ((dialogs: BaseDialogInfo[]) => void) | null = null;
