@@ -40,6 +40,7 @@ export function Cone(props: IProps) {
       className="tc-Palette-Cone"
       ref={viewportRef}
       onPointerDown={(e) => dragHelper.handlePointerDown(e)}
+      title={props.title}
     >
       <div className="tc-Palette-Cone-circle" style={{ background: color }}>
         {color2 && (
