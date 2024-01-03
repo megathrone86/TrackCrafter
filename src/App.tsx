@@ -3,7 +3,7 @@ import "./App.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { MainMenu } from "./components/MainMenu/MainMenu";
-import { SidePanel } from "./components/ComponentsPalette/SidePanel";
+import { SidePanel } from "./components/SidePanel/SidePanel";
 import { DrawArea } from "./components/DrawArea/DrawArea";
 import { useSelector } from "react-redux";
 import { IRootState } from "./store/store";

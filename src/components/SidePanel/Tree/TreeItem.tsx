@@ -1,13 +1,13 @@
 import "./TreeItem.scss";
 
 import { useDispatch } from "react-redux";
-import { IConeModel } from "../../models/IConeModel";
-import { TrackElementType } from "../../models/ITrackElementModel";
-import { IBaseTrackElementProps } from "../DrawArea/elements/IModelProps";
-import { setSelection } from "../../store/actions";
-import { GetConeColor } from "../DrawArea/elements/Cone/Cone";
-import { ILineModel } from "../../models/ILineModel";
-import { GetLineColor } from "../DrawArea/elements/Line/Line";
+import { IConeModel } from "../../../models/IConeModel";
+import { TrackElementType } from "../../../models/ITrackElementModel";
+import { IBaseTrackElementProps } from "../../DrawArea/elements/IModelProps";
+import { setSelection } from "../../../store/actions";
+import { GetConeColor } from "../../DrawArea/elements/Cone/Cone";
+import { ILineModel } from "../../../models/ILineModel";
+import { GetLineColor } from "../../DrawArea/elements/Line/Line";
 
 export function TreeItem(props: IBaseTrackElementProps) {
   const dispatch = useDispatch();

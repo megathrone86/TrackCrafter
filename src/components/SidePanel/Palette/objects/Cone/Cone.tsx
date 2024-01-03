@@ -1,14 +1,15 @@
 import { useRef } from "react";
 import "./Cone.scss";
-import { IConeModel, createConeModel } from "../../../../models/IConeModel";
+
+import { useDispatch, useSelector } from "react-redux";
+import { PaletteDragHelper } from "../../PaletteDragHelper";
+import { IConeModel, createConeModel } from "../../../../../models/IConeModel";
+import { GeometryHelper } from "../../../../DrawArea/GeometryHelper";
+import { geometryHelperSelector } from "../../../../../store/shared-selectors";
 import {
   GetConeColor,
   GetConeColor2,
-} from "../../../DrawArea/elements/Cone/Cone";
-import { useDispatch, useSelector } from "react-redux";
-import { PaletteDragHelper } from "../PaletteDragHelper";
-import { GeometryHelper } from "../../../DrawArea/GeometryHelper";
-import { geometryHelperSelector } from "../../../../store/shared-selectors";
+} from "../../../../DrawArea/elements/Cone/Cone";
 
 interface IProps {
   title: string;

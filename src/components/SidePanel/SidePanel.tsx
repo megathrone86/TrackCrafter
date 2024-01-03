@@ -1,3 +1,5 @@
+import "./SidePanel.scss";
+
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../store/store";
 import {
@@ -7,16 +9,14 @@ import {
   setSelectedAll,
 } from "../../store/actions";
 import { gridSizes } from "../../consts";
-
-import "./SidePanel.scss";
-import { Cone } from "./objects/Cone/Cone";
 import { ConeColor, createConeModel } from "../../models/IConeModel";
-import { TreeItem } from "./TreeItem";
+import { TreeItem } from "./Tree/TreeItem";
 import { IconButton } from "../shared/IconButton/IconButton";
 import { RadioButtons } from "../shared/RadioButtons/RadioButtons";
 import { showConfirm } from "../dialogs/ConfirmDialog/ConfirmDialog";
 import { ILineModel, createLineModel } from "../../models/ILineModel";
 import { TrackElementType } from "../../models/ITrackElementModel";
+import { Cone } from "./Palette/objects/Cone/Cone";
 
 const orangeConeModel = createConeModel(ConeColor.Orange);
 const redConeModel = createConeModel(ConeColor.Red);
