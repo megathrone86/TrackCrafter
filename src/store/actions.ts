@@ -13,6 +13,12 @@ export interface IMoveItemsPayload {
   newPos: IPoint;
 }
 
+export interface IUpdateItemFieldPayload {
+  item: IMapBaseItem;
+  propName: string;
+  propValue: unknown;
+}
+
 export const setCamPos = createAction<ICamPosition>("setCamPos");
 export const setGridSize = createAction<IOption<number>>("setGridSize");
 export const setFileName = createAction<string>("setFileName");
@@ -29,3 +35,5 @@ export const setSelectedAll = createAction("setSelectedAll");
 export const moveItems = createAction<IMoveItemsPayload[]>("moveItems");
 export const deleteItems = createAction<IMapBaseItem[]>("deleteItems");
 export const replaceItems = createAction<IMapBaseItem[]>("replaceItems");
+export const updateItemField =
+  createAction<IUpdateItemFieldPayload>("updateItemField");

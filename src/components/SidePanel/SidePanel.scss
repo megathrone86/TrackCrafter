@@ -1,7 +1,9 @@
 .tc-SidePanel {
     padding: 3px;
     border-right: 1px solid black;
-    max-width: 200px;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
 
     >*:not(:first-child) {
         padding: 3px 0;
@@ -23,5 +25,9 @@
         column-gap: 5px;
         row-gap: 5px;
         flex-wrap: wrap;
+    }
+
+    .tc-SidePanel-tree {
+        flex: 1 0 0;
     }
 }

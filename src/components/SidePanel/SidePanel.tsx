@@ -17,6 +17,7 @@ import { showConfirm } from "../dialogs/ConfirmDialog/ConfirmDialog";
 import { ILineModel, createLineModel } from "../../models/ILineModel";
 import { TrackElementType } from "../../models/ITrackElementModel";
 import { Cone } from "./Palette/objects/Cone/Cone";
+import { SelectedItemProperties } from "./SelectedItemProperties/SelectedItemProperties";
 
 const orangeConeModel = createConeModel(ConeColor.Orange);
 const redConeModel = createConeModel(ConeColor.Red);
@@ -70,18 +71,12 @@ export function SidePanel() {
         <p>Создание компонентов</p>
 
         <div className="tc-SidePanel-componentsList">
-          <Cone title="Оранжевый конус" prototypeModel={orangeConeModel}></Cone>
-          <Cone title="Красный конус" prototypeModel={redConeModel}></Cone>
-          <Cone title="Синий конус" prototypeModel={blueConeModel}></Cone>
-          <Cone title="Желтый конус" prototypeModel={yellowConeModel}></Cone>
-          <Cone
-            title="Красно-желтый конус"
-            prototypeModel={redYellowConeModel}
-          ></Cone>
-          <Cone
-            title="Сине-желтый конус"
-            prototypeModel={blueYellowConeModel}
-          ></Cone>
+          <Cone prototypeModel={orangeConeModel}></Cone>
+          <Cone prototypeModel={redConeModel}></Cone>
+          <Cone prototypeModel={blueConeModel}></Cone>
+          <Cone prototypeModel={yellowConeModel}></Cone>
+          <Cone prototypeModel={redYellowConeModel}></Cone>
+          <Cone prototypeModel={blueYellowConeModel}></Cone>
         </div>
       </div>
       <div className="tc-SidePanel-tree">
@@ -89,6 +84,10 @@ export function SidePanel() {
         {items.map((item, i) => (
           <TreeItem key={i} item={item}></TreeItem>
         ))}
+      </div>
+      <div className="tc-SidePanel-properties">
+        <p>Свойства объекта:</p>
+        <SelectedItemProperties />
       </div>
     </div>
   );

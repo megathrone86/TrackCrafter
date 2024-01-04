@@ -1,5 +1,10 @@
+import { IObject } from "../helpers/IObject";
 import { dependsFrom } from "../helpers/bl-helper";
-import { IMoveItemsPayload, ISetSelectionPayload } from "../store/actions";
+import {
+  IMoveItemsPayload,
+  ISetSelectionPayload,
+  IUpdateItemFieldPayload,
+} from "../store/actions";
 import { IMapBaseItem } from "../store/store";
 
 //Сервис для выполнения основных операций с содержимым редактора
@@ -58,6 +63,20 @@ class TrackService {
         return t;
       }
     });
+  }
+
+  //обновление поля модели
+  updateItemField(src: IMapBaseItem[], payload: IUpdateItemFieldPayload) {
+    return src.map((t) => (t === payload.item ? replaceField() : t));
+
+    function replaceField(): IMapBaseItem {
+      const newProperty: IObject = { [payload.propName]: payload.propValue };
+      const ret: IMapBaseItem = {
+        ...payload.item,
+        model: { ...payload.item.model, ...newProperty },
+      };
+      return ret;
+    }
   }
 }
 

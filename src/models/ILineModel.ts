@@ -39,3 +39,10 @@ export function createLineModel(
     style: LineStyle.Solid,
   };
 }
+
+export const lineColorNames = {
+  [LineColor.Red]: "Красный",
+  [LineColor.Blue]: "Синий",
+  [LineColor.Orange]: "Оранжевый",
+  [LineColor.Gray]: "Серый",
+};

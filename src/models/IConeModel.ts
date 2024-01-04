@@ -27,3 +27,12 @@ export function createConeModel(color: ConeColor): IConeModel {
     uid: createUid(),
   };
 }
+
+export const coneColorNames = {
+  [ConeColor.Red]: "Красный",
+  [ConeColor.Blue]: "Синий",
+  [ConeColor.Yellow]: "Желтый",
+  [ConeColor.Orange]: "Оранжевый",
+  [ConeColor.RedYellow]: "Красно-желтый",
+  [ConeColor.BlueYellow]: "Сине-желтый",
+};
