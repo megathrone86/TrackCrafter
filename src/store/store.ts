@@ -5,7 +5,7 @@ import {
   current,
 } from "@reduxjs/toolkit";
 
-import { TrackElementModel as ITrackElementModel } from "../models/ITrackElementModel";
+import { ITrackElementModel } from "../models/ITrackElementModel";
 import { gridSizes } from "../consts";
 import { IOption } from "../components/shared/IOption";
 import {

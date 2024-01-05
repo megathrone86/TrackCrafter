@@ -1,6 +1,6 @@
 import { createNewItemId, createUid } from "../helpers/bl-helper";
 import {
-  TrackElementModel as ITrackElementModel,
+  ITrackElementModel as ITrackElementModel,
   TrackElementType,
 } from "./ITrackElementModel";
 

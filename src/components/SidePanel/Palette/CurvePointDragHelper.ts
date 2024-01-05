@@ -13,7 +13,7 @@ import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { GeometryHelper } from "../../DrawArea/GeometryHelper";
 
-export class PaletteDragHelper extends MouseDragHelper {
+export class CurvePointDragHelper extends MouseDragHelper {
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
@@ -28,7 +28,17 @@ export class PaletteDragHelper extends MouseDragHelper {
     return elements[0] as HTMLElement;
   }
 
+  public handlePointerDown(e: React.PointerEvent) {
+    super.handlePointerDown(e);
+  }
+
+  public onPointerUp(e: PointerEvent) {
+    console.log("onPointerUp");
+    this.startDragging({ x: e.clientX, y: e.clientY });
+  }
+
   protected onDraggingStarted(mousePos: IPoint) {
+    console.debug("onDraggingStarted");
     const model = this.modelGenerator();
     this.dispatch(
       setAddingItem({
@@ -40,19 +50,25 @@ export class PaletteDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: IPoint) {
+    console.debug("onDraggingInsideTarget");
     const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     this.dispatch(setAddingItemMapPosition(worldPos));
   }
 
   protected onDraggingOutsideTarget(mousePos: IPoint) {
+    console.debug("onDraggingOutsideTarget");
     this.dispatch(setAddingItemScreenPosition(mousePos));
   }
 
   protected onDraggingFinished() {
+    console.debug("onDraggingFinished");
     const addingItem = store.getState().track.addingItem;
     if (addingItem && !addingItem.screenPos) {
       this.dispatch(addItem(addingItem));
     }
     this.dispatch(setAddingItem(null));
+  }
+
+  protected handlePointerUp(e: PointerEvent) {
   }
 }

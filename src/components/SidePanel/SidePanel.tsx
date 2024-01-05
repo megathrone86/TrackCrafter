@@ -18,6 +18,7 @@ import { ILineModel, createLineModel } from "../../models/ILineModel";
 import { TrackElementType } from "../../models/ITrackElementModel";
 import { Cone } from "./Palette/objects/Cone/Cone";
 import { SelectedItemProperties } from "./SelectedItemProperties/SelectedItemProperties";
+import { CurvePoint } from "./Palette/objects/CurvePoint/CurvePoint";
 
 const orangeConeModel = createConeModel(ConeColor.Orange);
 const redConeModel = createConeModel(ConeColor.Red);
@@ -65,6 +66,7 @@ export function SidePanel() {
             enabled={canAddLine}
             onClick={handleAddLineClick}
           />
+          <CurvePoint />
         </div>
       </div>
       <div className="tc-SidePanel-componentsPalette">

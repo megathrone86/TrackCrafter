@@ -1,4 +1,4 @@
-import { TrackElementModel } from "../../../models/ITrackElementModel";
+import { ITrackElementModel } from "../../../models/ITrackElementModel";
 import { IMapItem } from "../../../store/store";
 
 export interface ITrackElementProps<T> {
@@ -6,4 +6,4 @@ export interface ITrackElementProps<T> {
 }
 
 export interface IBaseTrackElementProps
-  extends ITrackElementProps<TrackElementModel> {}
+  extends ITrackElementProps<ITrackElementModel> {}

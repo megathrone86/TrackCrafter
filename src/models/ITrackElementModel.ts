@@ -4,9 +4,11 @@ export enum TrackElementType {
   Unknown = "",
   Cone = "Cone",
   Line = "Line",
+  CurvePoint = "CurvePoint",
+  Curve = "Curve",
 }
 
-export interface TrackElementModel extends IPoint {
+export interface ITrackElementModel extends IPoint {
   //тип элемента
   type: TrackElementType;
 

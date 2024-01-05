@@ -1,8 +1,5 @@
 import { createNewItemId, createUid } from "../helpers/bl-helper";
-import {
-  TrackElementModel as ITrackElementModel,
-  TrackElementType,
-} from "./ITrackElementModel";
+import { ITrackElementModel, TrackElementType } from "./ITrackElementModel";
 
 export enum ConeColor {
   Red = "Red",

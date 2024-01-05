@@ -30,7 +30,7 @@ export abstract class MouseDragHelper extends MouseMoveHelper {
     }
   }
 
-  private startDragging(mousePos: IPoint) {
+  protected startDragging(mousePos: IPoint) {
     this.draggingStarted = true;
 
     this.onDraggingStarted(mousePos);

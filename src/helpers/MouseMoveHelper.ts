@@ -55,7 +55,7 @@ export abstract class MouseMoveHelper {
     }
   }
 
-  private handlePointerUp(e: PointerEvent) {
+  protected handlePointerUp(e: PointerEvent) {
     this.handlePointerMove(e);
     this.onPointerUp(e);
     this.clearAll(e);
