@@ -1,4 +1,5 @@
 import { IPoint } from "../components/shared/IPoint";
+import { createId, createUid } from "../helpers/bl-helper";
 
 export enum TrackElementType {
   Unknown = "",
@@ -17,4 +18,11 @@ export interface ITrackElementModel extends IPoint {
 
   //уникальный id для внутреннего использования
   uid: string;
+}
+
+export function cloneTrackElementModel(
+  src: ITrackElementModel,
+  items: ITrackElementModel[]
+): ITrackElementModel {
+  return { ...src, uid: createUid(), id: createId(items) };
 }

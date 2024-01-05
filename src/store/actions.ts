@@ -35,5 +35,6 @@ export const setSelectedAll = createAction("setSelectedAll");
 export const moveItems = createAction<IMoveItemsPayload[]>("moveItems");
 export const deleteItems = createAction<IMapBaseItem[]>("deleteItems");
 export const replaceItems = createAction<IMapBaseItem[]>("replaceItems");
-export const updateItemField =
-  createAction<IUpdateItemFieldPayload>("updateItemField");
+export const updateItemModelField = createAction<IUpdateItemFieldPayload>(
+  "updateItemModelField"
+);

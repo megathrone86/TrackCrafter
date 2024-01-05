@@ -66,7 +66,7 @@ class TrackService {
   }
 
   //обновление поля модели
-  updateItemField(src: IMapBaseItem[], payload: IUpdateItemFieldPayload) {
+  updateModelField(src: IMapBaseItem[], payload: IUpdateItemFieldPayload) {
     return src.map((t) => (t === payload.item ? replaceField() : t));
 
     function replaceField(): IMapBaseItem {

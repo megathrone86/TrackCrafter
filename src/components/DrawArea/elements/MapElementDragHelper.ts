@@ -58,9 +58,11 @@ export class MapElementDragHelper extends MouseDragHelper {
   protected onDraggingStarted(mousePos: IPoint) {
     if (!this.canDrag) return;
 
-    const selection = store.getState().track.items.filter((t) => t.selected);
+    const selectedItems = store
+      .getState()
+      .track.items.filter((t) => t.selected);
 
-    this.movingItemOffsets = selection.map((t) => ({
+    this.movingItemOffsets = selectedItems.map((t) => ({
       item: t,
       offset: {
         x: this.item.model.x - t.model.x,

@@ -2,13 +2,21 @@ import "./CurvePoint.scss";
 
 import { ITrackElementProps } from "../IModelProps";
 import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../../../../store/store";
+import { IMapBaseItem, IRootState } from "../../../../store/store";
 import { MapElementDragHelper } from "../MapElementDragHelper";
 import { useRef } from "react";
 import { GeometryHelper } from "../../GeometryHelper";
 import { geometryHelperSelector } from "../../../../store/shared-selectors";
-import { ICurvePointModel } from "../../../../models/ICurveModel";
-import { addItem, setAddingItem } from "../../../../store/actions";
+import {
+  ICurveModel,
+  ICurvePointModel,
+  createCurveModel,
+} from "../../../../models/ICurveModel";
+import { addItem, updateItemModelField } from "../../../../store/actions";
+import {
+  TrackElementType,
+  cloneTrackElementModel,
+} from "../../../../models/ITrackElementModel";
 
 export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   const dispatch = useDispatch();
@@ -28,6 +36,8 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
     geometryHelper
   );
 
+  const items = useSelector((state: IRootState) => state.track.items);
+
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
 
   const isSelected = props.item.selected;
@@ -36,6 +46,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
 
   return (
     <div
+      key={props.item.model.uid}
       className="tc-DrawArea-CurvePoint"
       style={getStyle()}
       ref={viewportRef}
@@ -58,8 +69,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
       e.preventDefault();
       e.stopPropagation();
 
-      dispatch(addItem(addingItem));
-      dispatch(setAddingItem(null));
+      createCurvePoint();
     } else {
       dragHelper.handlePointerDown(e);
     }
@@ -82,5 +92,39 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
     } else {
       return ret;
     }
+  }
+
+  function createCurvePoint() {
+    const selectedItems = items.filter((t) => t.selected);
+
+    if (
+      selectedItems.length === 1 &&
+      selectedItems[0].model.type === TrackElementType.Curve
+    ) {
+      const curveModel = selectedItems[0].model as ICurveModel;
+      const newPoints = [
+        ...curveModel.points,
+        cloneTrackElementModel(props.item.model, curveModel.points),
+      ];
+
+      dispatch(
+        updateItemModelField({
+          item: selectedItems[0],
+          //TODO: use nameof
+          propName: "points",
+          propValue: newPoints,
+        })
+      );
+    } else {
+      const newCurve = createCurveModel();
+      newCurve.points = [cloneTrackElementModel(props.item.model, [])];
+
+      const newItem: IMapBaseItem = {
+        model: newCurve,
+        selected: false,
+      };
+      dispatch(addItem(newItem));
+    }
+    // dispatch(setAddingItem(null));
   }
 }

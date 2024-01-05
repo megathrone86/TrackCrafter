@@ -84,7 +84,7 @@ export function SidePanel() {
       <div className="tc-SidePanel-tree">
         <p>Дерево объектов</p>
         {items.map((item, i) => (
-          <TreeItem key={i} item={item}></TreeItem>
+          <TreeItem key={item.model.uid} item={item}></TreeItem>
         ))}
       </div>
       <div className="tc-SidePanel-properties">

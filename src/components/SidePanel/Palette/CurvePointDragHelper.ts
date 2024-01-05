@@ -33,12 +33,10 @@ export class CurvePointDragHelper extends MouseDragHelper {
   }
 
   public onPointerUp(e: PointerEvent) {
-    console.log("onPointerUp");
     this.startDragging({ x: e.clientX, y: e.clientY });
   }
 
   protected onDraggingStarted(mousePos: IPoint) {
-    console.debug("onDraggingStarted");
     const model = this.modelGenerator();
     this.dispatch(
       setAddingItem({
@@ -50,18 +48,15 @@ export class CurvePointDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: IPoint) {
-    console.debug("onDraggingInsideTarget");
     const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     this.dispatch(setAddingItemMapPosition(worldPos));
   }
 
   protected onDraggingOutsideTarget(mousePos: IPoint) {
-    console.debug("onDraggingOutsideTarget");
     this.dispatch(setAddingItemScreenPosition(mousePos));
   }
 
   protected onDraggingFinished() {
-    console.debug("onDraggingFinished");
     const addingItem = store.getState().track.addingItem;
     if (addingItem && !addingItem.screenPos) {
       this.dispatch(addItem(addingItem));
@@ -69,6 +64,5 @@ export class CurvePointDragHelper extends MouseDragHelper {
     this.dispatch(setAddingItem(null));
   }
 
-  protected handlePointerUp(e: PointerEvent) {
-  }
+  protected handlePointerUp(e: PointerEvent) {}
 }

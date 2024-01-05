@@ -1,11 +1,13 @@
 import { ILineModel } from "../models/ILineModel";
-import { TrackElementType } from "../models/ITrackElementModel";
-import { IMapBaseItem, store } from "../store/store";
+import {
+  ITrackElementModel,
+  TrackElementType,
+} from "../models/ITrackElementModel";
+import { IMapBaseItem } from "../store/store";
 import { v4 as uuidv4 } from "uuid";
 
 //создает имя для нового элемента
-export function createNewItemId(): string {
-  const items = store.getState().track.items;
+export function createId(items: ITrackElementModel[]): string {
   const itemNumber = items.length + 1;
   return itemNumber.toString();
 }

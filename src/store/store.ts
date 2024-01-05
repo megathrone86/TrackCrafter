@@ -21,7 +21,7 @@ import {
   setGridSize,
   setSelectedAll,
   setSelection,
-  updateItemField,
+  updateItemModelField,
 } from "./actions";
 import { IPoint } from "../components/shared/IPoint";
 import { trackService } from "../services/TrackService";
@@ -93,8 +93,8 @@ const reducer = combineReducers({
       builder.addCase(moveItems, (prevValue, action) =>
         trackService.moveItems(current(prevValue), action.payload)
       );
-      builder.addCase(updateItemField, (prevValue, action) =>
-        trackService.updateItemField(current(prevValue), action.payload)
+      builder.addCase(updateItemModelField, (prevValue, action) =>
+        trackService.updateModelField(current(prevValue), action.payload)
       );
     }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {
