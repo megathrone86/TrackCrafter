@@ -39,6 +39,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   const items = useSelector((state: IRootState) => state.track.items);
 
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
+  const isAdding = addingItem && props.item === addingItem;
 
   const isSelected = props.item.selected;
 
@@ -65,7 +66,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   );
 
   function handlePointerDown(e: React.PointerEvent) {
-    if (addingItem && props.item === addingItem) {
+    if (isAdding) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -81,16 +82,15 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
       height: `${pointRadius}px`,
     };
 
-    const isScreenPositioned =
-      addingItem?.screenPos && props.item.model === addingItem.model;
-    if (!isScreenPositioned) {
+    const isScreenPositioned = isAdding && addingItem?.screenPos;
+    if (isScreenPositioned) {
+      return ret;
+    } else {
       return {
         ...ret,
         left: geometryHelper.worldXToScreen(props.item.model.x) + "px",
         top: geometryHelper.worldYToScreen(props.item.model.y) + "px",
       };
-    } else {
-      return ret;
     }
   }
 

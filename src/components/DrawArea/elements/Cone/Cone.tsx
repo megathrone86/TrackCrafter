@@ -28,6 +28,7 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
   );
 
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
+  const isAdding = addingItem && props.item === addingItem;
 
   const isSelected = props.item.selected;
 
@@ -63,16 +64,15 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
       height: `${coneWidth}px`,
     };
 
-    const isScreenPositioned =
-      addingItem?.screenPos && props.item.model === addingItem.model;
-    if (!isScreenPositioned) {
+    const isScreenPositioned = isAdding && addingItem?.screenPos;
+    if (isScreenPositioned) {
+      return ret;
+    } else {
       return {
         ...ret,
         left: geometryHelper.worldXToScreen(props.item.model.x) + "px",
         top: geometryHelper.worldYToScreen(props.item.model.y) + "px",
       };
-    } else {
-      return ret;
     }
   }
 }

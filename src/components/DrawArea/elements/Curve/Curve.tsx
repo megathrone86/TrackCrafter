@@ -27,8 +27,6 @@ export function Curve(props: ITrackElementProps<ICurveModel>) {
     geometryHelper
   );
 
-  const addingItem = useSelector((state: IRootState) => state.track.addingItem);
-
   const isSelected = props.item.selected;
 
   const color = "#0000";
