@@ -46,6 +46,9 @@ export class CurvePointDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: IPoint) {
+    //т.к. камера могла быть перемещена
+    this.geometryHelper.updateState();
+
     const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
     this.dispatch(setAddingItemMapPosition(worldPos));
   }
@@ -54,9 +57,7 @@ export class CurvePointDragHelper extends MouseDragHelper {
     this.dispatch(setAddingItemScreenPosition(mousePos));
   }
 
-  protected onDraggingFinished() {
-  }
+  protected onDraggingFinished() {}
 
-  protected handlePointerUp(e: PointerEvent) {
-  }
+  protected handlePointerUp(e: PointerEvent) {}
 }

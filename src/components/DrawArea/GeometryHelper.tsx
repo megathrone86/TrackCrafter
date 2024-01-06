@@ -1,5 +1,5 @@
 import { pixelsToMeterRatio } from "../../consts";
-import { ICamPosition } from "../../store/store";
+import { ICamPosition, store } from "../../store/store";
 import { IPoint } from "../shared/IPoint";
 
 export interface IGeometryHelperParams {
@@ -8,11 +8,15 @@ export interface IGeometryHelperParams {
 }
 
 export class GeometryHelper {
-  constructor(private params: IGeometryHelperParams) {}
+  private state: IGeometryHelperParams;
+
+  constructor(params: IGeometryHelperParams) {
+    this.state = params;
+  }
 
   //Размер ячейки в пикселях
   public getGridCellSize() {
-    return pixelsToMeterRatio * this.params.gridSize;
+    return pixelsToMeterRatio * this.state.gridSize;
   }
 
   public mousePosToWord(mousePos: IPoint, roundToGrid = false) {
@@ -23,22 +27,27 @@ export class GeometryHelper {
   }
 
   public screenXToWorld(screenX: number, roundToGrid = false) {
-    const ret = (screenX + this.params.camPos.x) / pixelsToMeterRatio;
+    const ret = (screenX + this.state.camPos.x) / pixelsToMeterRatio;
     return roundToGrid ? this.roundCoordinateToGrid(ret) : ret;
   }
   public screenYToWorld(screenY: number, roundToGrid = false) {
-    const ret = (screenY + this.params.camPos.y) / pixelsToMeterRatio;
+    const ret = (screenY + this.state.camPos.y) / pixelsToMeterRatio;
     return roundToGrid ? this.roundCoordinateToGrid(ret) : ret;
   }
 
   public roundCoordinateToGrid(coordinate: number) {
-    return Math.round(coordinate / this.params.gridSize) * this.params.gridSize;
+    return Math.round(coordinate / this.state.gridSize) * this.state.gridSize;
   }
 
   public worldXToScreen(worldX: number) {
-    return worldX * pixelsToMeterRatio - this.params.camPos.x;
+    return worldX * pixelsToMeterRatio - this.state.camPos.x;
   }
   public worldYToScreen(worldY: number) {
-    return worldY * pixelsToMeterRatio - this.params.camPos.y;
+    return worldY * pixelsToMeterRatio - this.state.camPos.y;
+  }
+
+  public updateState() {
+    const state = store.getState();
+    this.state = { camPos: state.camPos, gridSize: state.gridSize.value };
   }
 }
