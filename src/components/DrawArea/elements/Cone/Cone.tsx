@@ -37,7 +37,7 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
 
   return (
     <div
-      className="tc-DrawArea-Cone"
+      className={getClass()}
       style={getStyle()}
       ref={viewportRef}
       onPointerDown={(e) => dragHelper.handlePointerDown(e)}
@@ -57,6 +57,15 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
       </div>
     </div>
   );
+
+  function getClass() {
+    const ret = "tc-DrawArea-Cone";
+    if (isAdding) {
+      return `${ret} no-pointer-events`;
+    } else {
+      return ret;
+    }
+  }
 
   function getStyle() {
     let ret = {

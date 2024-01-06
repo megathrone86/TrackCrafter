@@ -2,14 +2,12 @@ import { Dispatch } from "react";
 import { AnyAction } from "redux";
 import { IPoint } from "../../shared/IPoint";
 import {
-  addItem,
   setAddingItem,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
 } from "../../../store/actions";
 import { ITrackElementModel } from "../../../models/ITrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
-import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { GeometryHelper } from "../../DrawArea/GeometryHelper";
 
@@ -57,12 +55,8 @@ export class CurvePointDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingFinished() {
-    const addingItem = store.getState().track.addingItem;
-    if (addingItem && !addingItem.screenPos) {
-      this.dispatch(addItem(addingItem));
-    }
-    this.dispatch(setAddingItem(null));
   }
 
-  protected handlePointerUp(e: PointerEvent) {}
+  protected handlePointerUp(e: PointerEvent) {
+  }
 }

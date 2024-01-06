@@ -2,21 +2,12 @@ import "./CurvePoint.scss";
 
 import { ITrackElementProps } from "../IModelProps";
 import { useDispatch, useSelector } from "react-redux";
-import { IMapBaseItem, IRootState } from "../../../../store/store";
+import { IRootState } from "../../../../store/store";
 import { MapElementDragHelper } from "../MapElementDragHelper";
 import { useRef } from "react";
 import { GeometryHelper } from "../../GeometryHelper";
 import { geometryHelperSelector } from "../../../../store/shared-selectors";
-import {
-  ICurveModel,
-  ICurvePointModel,
-  createCurveModel,
-} from "../../../../models/ICurveModel";
-import { addItem, updateItemModelField } from "../../../../store/actions";
-import {
-  TrackElementType,
-  cloneTrackElementModel,
-} from "../../../../models/ITrackElementModel";
+import { ICurvePointModel } from "../../../../models/ICurveModel";
 
 export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   const dispatch = useDispatch();
@@ -36,7 +27,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
     geometryHelper
   );
 
-  const items = useSelector((state: IRootState) => state.track.items);
+  // const items = useSelector((state: IRootState) => state.track.items);
 
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
   const isAdding = addingItem && props.item === addingItem;
@@ -48,7 +39,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   return (
     <div
       key={props.item.model.uid}
-      className="tc-DrawArea-CurvePoint"
+      className={getClass()}
       style={getStyle()}
       ref={viewportRef}
       onPointerDown={handlePointerDown}
@@ -66,13 +57,15 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   );
 
   function handlePointerDown(e: React.PointerEvent) {
-    if (isAdding) {
-      e.preventDefault();
-      e.stopPropagation();
+    dragHelper.handlePointerDown(e);
+  }
 
-      createCurvePoint();
+  function getClass() {
+    const ret = "tc-DrawArea-CurvePoint";
+    if (isAdding) {
+      return `${ret} no-pointer-events`;
     } else {
-      dragHelper.handlePointerDown(e);
+      return ret;
     }
   }
 
@@ -92,39 +85,5 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
         top: geometryHelper.worldYToScreen(props.item.model.y) + "px",
       };
     }
-  }
-
-  function createCurvePoint() {
-    const selectedItems = items.filter((t) => t.selected);
-
-    if (
-      selectedItems.length === 1 &&
-      selectedItems[0].model.type === TrackElementType.Curve
-    ) {
-      const curveModel = selectedItems[0].model as ICurveModel;
-      const newPoints = [
-        ...curveModel.points,
-        cloneTrackElementModel(props.item.model, curveModel.points),
-      ];
-
-      dispatch(
-        updateItemModelField({
-          item: selectedItems[0],
-          //TODO: use nameof
-          propName: "points",
-          propValue: newPoints,
-        })
-      );
-    } else {
-      const newCurve = createCurveModel();
-      newCurve.points = [cloneTrackElementModel(props.item.model, [])];
-
-      const newItem: IMapBaseItem = {
-        model: newCurve,
-        selected: false,
-      };
-      dispatch(addItem(newItem));
-    }
-    // dispatch(setAddingItem(null));
   }
 }
