@@ -10,6 +10,8 @@ import { geometryHelperSelector } from "../../../../store/shared-selectors";
 import { ICurveModel, ICurvePointModel } from "../../../../models/ICurveModel";
 import { addItem, setAddingItem } from "../../../../store/actions";
 import { CurvePoint } from "../CurvePoint/CurvePoint";
+import { IPoint } from "../../../shared/IPoint";
+import { GetLineColor } from "../Line/Line";
 
 export function Curve(props: ITrackElementProps<ICurveModel>) {
   const dispatch = useDispatch();
@@ -31,6 +33,8 @@ export function Curve(props: ITrackElementProps<ICurveModel>) {
 
   const color = "#0000";
 
+  const points = getPoints();
+
   return (
     <div
       className="tc-DrawArea-Curve"
@@ -38,6 +42,9 @@ export function Curve(props: ITrackElementProps<ICurveModel>) {
       ref={viewportRef}
       onPointerDown={handlePointerDown}
     >
+      <svg>
+        <path className="no-pointer-events" strokeWidth="2" d={points}></path>
+      </svg>
       {props.item.model.points.map((point) => getCurvePoint(point))}
     </div>
   );
@@ -47,30 +54,33 @@ export function Curve(props: ITrackElementProps<ICurveModel>) {
   }
 
   function getStyle() {
-    return {};
+    return {
+      stroke: GetLineColor(props.item.model.color),
+    };
   }
-  //   let ret = {
-  //     width: `${pointRadius}px`,
-  //     height: `${pointRadius}px`,
-  //   };
-
-  //   const isScreenPositioned =
-  //     addingItem?.screenPos && props.item.model === addingItem.model;
-  //   if (!isScreenPositioned) {
-  //     return {
-  //       ...ret,
-  //       left: geometryHelper.worldXToScreen(props.item.model.x) + "px",
-  //       top: geometryHelper.worldYToScreen(props.item.model.y) + "px",
-  //     };
-  //   } else {
-  //     return ret;
-  //   }
-  // }
 
   function getCurvePoint(point: ICurvePointModel) {
     //TODO: придумать что-нибудь с этим костылем
     const item = { model: point, selected: props.item.selected };
-
     return <CurvePoint key={point.uid} item={item} />;
+  }
+
+  function getPoints() {
+    const points = props.item.model.points || [];
+    if (points.length > 0) {
+      let ret = `M${pointToWorld(points[0])}`;
+      for (let i = 1; i < points.length; i += 2) {
+        if (points[i] && points[i + 1]) {
+          ret += ` S${pointToWorld(points[i])} ${pointToWorld(points[i + 1])}`;
+        }
+      }
+      return ret;
+    }
+  }
+
+  function pointToWorld(pt: IPoint) {
+    const x = geometryHelper.worldXToScreen(pt.x);
+    const y = geometryHelper.worldYToScreen(pt.y);
+    return `${x},${y}`;
   }
 }

@@ -39,7 +39,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   return (
     <div key={props.item.model.uid} className={getClass()} style={getStyle()}>
       <div
-        className="tc-DrawArea-CurvePoint-root"
+        className={getRootClass()}
         ref={viewportRef}
         onPointerDown={handlePointerDown}
       >
@@ -66,6 +66,15 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
       } else {
         return `${ret} no-pointer-events`;
       }
+    } else {
+      return ret;
+    }
+  }
+
+  function getRootClass() {
+    const ret = "tc-DrawArea-CurvePoint-root";
+    if (isAdding) {
+      return `${ret} no-pointer-events`;
     } else {
       return ret;
     }

@@ -37,7 +37,7 @@ export function Line(props: ITrackElementProps<ILineModel>) {
 
   return (
     <div className="tc-DrawArea-Line" style={getStyle()}>
-      <svg>
+      <svg className="no-pointer-events">
         {isSelected && (
           <path
             className="tc-DrawArea-line-selection no-pointer-events"
