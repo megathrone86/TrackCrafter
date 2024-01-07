@@ -41,11 +41,11 @@ export function Line(props: ITrackElementProps<ILineModel>) {
         {isSelected && (
           <path
             className="tc-DrawArea-line-selection no-pointer-events"
-            strokeWidth="4"
+            strokeWidth="3"
             d={points}
           ></path>
         )}
-        <path className="no-pointer-events" strokeWidth="3" d={points}></path>
+        <path className="no-pointer-events" strokeWidth="2" d={points}></path>
         <path
           className="tc-DrawArea-Line-selector"
           ref={viewportRef}
