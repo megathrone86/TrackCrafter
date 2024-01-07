@@ -31,8 +31,6 @@ export function Curve(props: ITrackElementProps<ICurveModel>) {
 
   const isSelected = props.item.selected;
 
-  const color = "#0000";
-
   const points = getPoints();
 
   return (
@@ -67,7 +65,7 @@ export function Curve(props: ITrackElementProps<ICurveModel>) {
 
   function getCurvePoint(point: ICurvePointModel) {
     //TODO: придумать что-нибудь с этим костылем
-    const item = { model: point, selected: props.item.selected };
+    const item = { model: point, selected: false, dragging: false };
     return <CurvePoint key={point.uid} item={item} />;
   }
 

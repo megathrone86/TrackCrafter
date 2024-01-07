@@ -143,6 +143,7 @@ export function SidePanel() {
       addItem({
         model: createLineModel(selectedItems[0].model, selectedItems[1].model),
         selected: false,
+        dragging: false,
       })
     );
   }

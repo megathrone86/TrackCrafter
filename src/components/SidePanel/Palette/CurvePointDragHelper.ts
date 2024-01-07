@@ -6,6 +6,7 @@ import {
   setAddingItemHidden,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
+  setDragging,
 } from "../../../store/actions";
 import { ITrackElementModel } from "../../../models/ITrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
@@ -42,6 +43,7 @@ export class CurvePointDragHelper extends MouseDragHelper {
       setAddingItem({
         screenPos: mousePos,
         selected: false,
+        dragging: true,
         model,
       })
     );

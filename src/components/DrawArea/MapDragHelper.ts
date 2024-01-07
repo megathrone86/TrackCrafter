@@ -103,6 +103,7 @@ function createCurvePoint(
     const newItem: IMapBaseItem = {
       model: newCurve,
       selected: false,
+      dragging: false,
     };
     dispatch(addItem(newItem));
   }

@@ -39,6 +39,7 @@ export interface IMapItem<T> {
 
   //временные свойства, используемые для работы
   selected: boolean;
+  dragging: boolean;
 }
 
 export interface IMapBaseItem extends IMapItem<ITrackElementModel> {}
@@ -100,6 +101,7 @@ const reducer = combineReducers({
       );
     }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {
+      builder.addCase(setSelection, (_, action) => null);
       builder.addCase(setAddingItem, (_, action) => action.payload);
       builder.addCase(setAddingItemScreenPosition, (prevValue, action) =>
         prevValue

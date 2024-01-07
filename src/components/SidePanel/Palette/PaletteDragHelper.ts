@@ -34,6 +34,7 @@ export class PaletteDragHelper extends MouseDragHelper {
       setAddingItem({
         screenPos: mousePos,
         selected: false,
+        dragging: true,
         model,
       })
     );

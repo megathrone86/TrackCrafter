@@ -3,7 +3,10 @@ import "./CurvePoint.scss";
 import { ITrackElementProps } from "../IModelProps";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../../../store/store";
-import { MapElementDragHelper } from "../MapElementDragHelper";
+import {
+  CurvePointMapElementDragHelper,
+  MapElementDragHelper,
+} from "../MapElementDragHelper";
 import { useRef } from "react";
 import { GeometryHelper } from "../../GeometryHelper";
 import { geometryHelperSelector } from "../../../../store/shared-selectors";
@@ -20,14 +23,12 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
 
   const pointRadius = geometryHelper.getGridCellSize();
 
-  const dragHelper = new MapElementDragHelper(
+  const dragHelper = new CurvePointMapElementDragHelper(
     dispatch,
     viewportRef,
     props.item,
     geometryHelper
   );
-
-  // const items = useSelector((state: IRootState) => state.track.items);
 
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
   const isAdding = addingItem && props.item === addingItem;
@@ -41,7 +42,7 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
       <div
         className={getRootClass()}
         ref={viewportRef}
-        onPointerDown={handlePointerDown}
+        onPointerDown={(e) => dragHelper.handlePointerDown(e)}
       >
         <div
           className="tc-DrawArea-CurvePoint-circle no-pointer-events"
@@ -53,10 +54,6 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
       </div>
     </div>
   );
-
-  function handlePointerDown(e: React.PointerEvent) {
-    dragHelper.handlePointerDown(e);
-  }
 
   function getClass() {
     const ret = "tc-DrawArea-CurvePoint";

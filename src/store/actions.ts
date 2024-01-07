@@ -19,6 +19,11 @@ export interface IUpdateItemFieldPayload {
   propValue: unknown;
 }
 
+export interface ISetDraggingPayload {
+  item: IMapBaseItem;
+  dragging: boolean;
+}
+
 export const setCamPos = createAction<ICamPosition>("setCamPos");
 export const setGridSize = createAction<IOption<number>>("setGridSize");
 export const setFileName = createAction<string>("setFileName");
@@ -32,6 +37,7 @@ export const setAddingItemMapPosition = createAction<IPoint>(
 );
 export const addItem = createAction<IMapBaseItem>("addItem");
 export const setSelection = createAction<ISetSelectionPayload>("setSelection");
+export const setDragging = createAction<ISetDraggingPayload>("setDragging");
 export const setSelectedAll = createAction("setSelectedAll");
 export const moveItems = createAction<IMoveItemsPayload[]>("moveItems");
 export const deleteItems = createAction<IMapBaseItem[]>("deleteItems");
