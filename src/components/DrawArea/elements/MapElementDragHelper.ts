@@ -36,6 +36,7 @@ export class MapElementDragHelper extends MouseDragHelper {
   }
 
   protected onPointerUp(e: PointerEvent) {
+    console.debug("MapElementDragHelper onPointerUp");
     if (this.draggingStarted) {
       super.onPointerUp(e);
     } else {

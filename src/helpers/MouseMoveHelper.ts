@@ -56,7 +56,7 @@ export abstract class MouseMoveHelper {
 
   protected abstract onPointerMove(mousePos: IPoint, delta: IPoint): void;
 
-  protected clearAll(e: PointerEvent) {
+  protected clearAll(e: PointerEvent | null) {
     console.debug("clearAll");
     // document.onpointermove = null;
     // document.onpointerup = null;

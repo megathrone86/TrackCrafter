@@ -3,6 +3,7 @@ import { AnyAction } from "redux";
 import { IPoint } from "../../shared/IPoint";
 import {
   setAddingItem,
+  setAddingItemHidden,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
 } from "../../../store/actions";
@@ -10,6 +11,7 @@ import { ITrackElementModel } from "../../../models/ITrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { GeometryHelper } from "../../DrawArea/GeometryHelper";
+import { store } from "../../../store/store";
 
 export class CurvePointDragHelper extends MouseDragHelper {
   constructor(
@@ -46,15 +48,34 @@ export class CurvePointDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: IPoint) {
-    //т.к. камера могла быть перемещена
-    this.geometryHelper.updateState();
+    if (!this.haltIfNeeded()) {
+      console.debug("onDraggingInsideTarget");
 
-    const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
-    this.dispatch(setAddingItemMapPosition(worldPos));
+      //т.к. камера могла быть перемещена
+      this.geometryHelper.updateState();
+
+      const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
+      this.dispatch(setAddingItemMapPosition(worldPos));
+    }
   }
 
   protected onDraggingOutsideTarget(mousePos: IPoint) {
-    this.dispatch(setAddingItemScreenPosition(mousePos));
+    if (!this.haltIfNeeded()) {
+      this.haltIfNeeded();
+
+      console.debug("onDraggingOutsideTarget");
+      // this.dispatch(setAddingItemScreenPosition(mousePos));
+      this.dispatch(setAddingItemHidden(true));
+    }
+  }
+
+  //костыль для того, чтобы завершить все обработчики жестов, когда пользователь отменил рисование
+  protected haltIfNeeded() {
+    const addingItem = store.getState().track.addingItem;
+    if (!addingItem) {
+      this.clearAll(null);
+      return true;
+    }
   }
 
   protected onDraggingFinished() {}

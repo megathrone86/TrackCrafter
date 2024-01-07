@@ -7,6 +7,9 @@ import { geometryHelperSelector } from "../../../../../store/shared-selectors";
 import { IconButton } from "../../../../shared/IconButton/IconButton";
 import { createCurvePointModel } from "../../../../../models/ICurveModel";
 import { CurvePointDragHelper } from "../../CurvePointDragHelper";
+import { IRootState } from "../../../../../store/store";
+import { TrackElementType } from "../../../../../models/ITrackElementModel";
+import { setAddingItem } from "../../../../../store/actions";
 
 export function CurvePoint() {
   const dispatch = useDispatch();
@@ -17,6 +20,10 @@ export function CurvePoint() {
     useSelector(geometryHelperSelector.selector, geometryHelperSelector.equlity)
   );
 
+  const addingItem = useSelector((state: IRootState) => state.track.addingItem);
+  const isAddingCurvePoint =
+    addingItem && addingItem.model.type === TrackElementType.CurvePoint;
+
   const dragHelper = new CurvePointDragHelper(
     dispatch,
     viewportRef,
@@ -24,7 +31,16 @@ export function CurvePoint() {
     geometryHelper
   );
 
-  return (
+  return isAddingCurvePoint ? (
+    <div ref={viewportRef}>
+      <IconButton
+        icon="fi-rr-cross-circle"
+        hint="Закончить редактирование кривой"
+        enabled={() => true}
+        onClick={closeCurveEditor}
+      />
+    </div>
+  ) : (
     <div ref={viewportRef}>
       <IconButton
         icon="fi-rr-angle-up"
@@ -37,5 +53,9 @@ export function CurvePoint() {
 
   function canAddCurve() {
     return true;
+  }
+
+  function closeCurveEditor() {
+    dispatch(setAddingItem(null));
   }
 }

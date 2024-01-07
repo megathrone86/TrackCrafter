@@ -37,20 +37,18 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   const color = "#0000";
 
   return (
-    <div
-      key={props.item.model.uid}
-      className={getClass()}
-      style={getStyle()}
-      ref={viewportRef}
-      onPointerDown={handlePointerDown}
-    >
-      <div className="tc-DrawArea-CurvePoint-root">
+    <div key={props.item.model.uid} className={getClass()} style={getStyle()}>
+      <div
+        className="tc-DrawArea-CurvePoint-root"
+        ref={viewportRef}
+        onPointerDown={handlePointerDown}
+      >
         <div
-          className="tc-DrawArea-CurvePoint-circle"
+          className="tc-DrawArea-CurvePoint-circle no-pointer-events"
           style={{ background: color }}
         ></div>
         {isSelected && (
-          <div className="tc-DrawArea-CurvePoint-circle-selection tc-DrawArea-circle-selection"></div>
+          <div className="tc-DrawArea-CurvePoint-circle-selection tc-DrawArea-circle-selection no-pointer-events"></div>
         )}
       </div>
     </div>
@@ -63,7 +61,11 @@ export function CurvePoint(props: ITrackElementProps<ICurvePointModel>) {
   function getClass() {
     const ret = "tc-DrawArea-CurvePoint";
     if (isAdding) {
-      return `${ret} no-pointer-events`;
+      if (addingItem.hidden) {
+        return `${ret} no-pointer-events hidden`;
+      } else {
+        return `${ret} no-pointer-events`;
+      }
     } else {
       return ret;
     }

@@ -1,5 +1,7 @@
 import { IObject } from "../helpers/IObject";
 import { dependsFrom } from "../helpers/bl-helper";
+import { ICurveModel } from "../models/ICurveModel";
+import { TrackElementType } from "../models/ITrackElementModel";
 import {
   IMoveItemsPayload,
   ISetSelectionPayload,
@@ -23,9 +25,21 @@ class TrackService {
 
   //добавление
   setSelection(src: IMapBaseItem[], payload: ISetSelectionPayload) {
+    let item = payload.item;
+    if (item.model.type === TrackElementType.CurvePoint) {
+      const parent = src.find(
+        (t) =>
+          t.model.type === TrackElementType.Curve &&
+          (t.model as ICurveModel).points.includes(item.model)
+      );
+      if (parent) {
+        item = parent;
+      }
+    }
+
     if (payload.additiveMode) {
       return src.map((t) => {
-        if (payload.item.model === t.model) {
+        if (item.model === t.model) {
           return { ...t, selected: true };
         } else {
           return t;
@@ -33,7 +47,7 @@ class TrackService {
       });
     } else if (payload.switchMode) {
       return src.map((t) => {
-        if (payload.item.model === t.model) {
+        if (item.model === t.model) {
           return { ...t, selected: !t.selected };
         } else {
           return t;
@@ -41,7 +55,7 @@ class TrackService {
       });
     } else {
       return src.map((t) => {
-        return { ...t, selected: payload.item.model === t.model };
+        return { ...t, selected: item.model === t.model };
       });
     }
   }

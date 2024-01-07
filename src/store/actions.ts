@@ -26,6 +26,7 @@ export const setAddingItem = createAction<IAddingItem | null>("setAddingItem");
 export const setAddingItemScreenPosition = createAction<IPoint>(
   "setAddingItemScreenPosition"
 );
+export const setAddingItemHidden = createAction<boolean>("setAddingItemHidden");
 export const setAddingItemMapPosition = createAction<IPoint>(
   "setAddingItemMapPosition"
 );

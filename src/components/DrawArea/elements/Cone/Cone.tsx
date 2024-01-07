@@ -36,14 +36,16 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
   const color2 = GetConeColor2(props.item.model.color);
 
   return (
-    <div
-      className={getClass()}
-      style={getStyle()}
-      ref={viewportRef}
-      onPointerDown={(e) => dragHelper.handlePointerDown(e)}
-    >
-      <div className="tc-DrawArea-Cone-root">
-        <div className="tc-DrawArea-Cone-circle" style={{ background: color }}>
+    <div className={getClass()} style={getStyle()}>
+      <div
+        className="tc-DrawArea-Cone-root"
+        ref={viewportRef}
+        onPointerDown={(e) => dragHelper.handlePointerDown(e)}
+      >
+        <div
+          className="tc-DrawArea-Cone-circle no-pointer-events"
+          style={{ background: color }}
+        >
           {color2 && (
             <div
               className="tc-DrawArea-Cone-inner-circle"
@@ -52,7 +54,7 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
           )}
         </div>
         {isSelected && (
-          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-circle-selection"></div>
+          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-circle-selection no-pointer-events"></div>
         )}
       </div>
     </div>

@@ -26,3 +26,8 @@
 .no-pointer-events {
   pointer-events: none;
 }
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}

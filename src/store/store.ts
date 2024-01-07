@@ -14,6 +14,7 @@ import {
   moveItems,
   replaceItems,
   setAddingItem,
+  setAddingItemHidden,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
   setCamPos,
@@ -29,6 +30,7 @@ import { trackService } from "../services/TrackService";
 export interface IAddingItem extends IMapItem<ITrackElementModel> {
   screenPos?: IPoint;
   mapPos?: IPoint;
+  hidden?: boolean;
 }
 
 export interface IMapItem<T> {
@@ -104,7 +106,16 @@ const reducer = combineReducers({
           ? {
               ...prevValue,
               model: { ...prevValue.model, x: 0, y: 0 },
+              hidden: false,
               screenPos: action.payload,
+            }
+          : null
+      );
+      builder.addCase(setAddingItemHidden, (prevValue, action) =>
+        prevValue
+          ? {
+              ...prevValue,
+              hidden: action.payload,
             }
           : null
       );
@@ -113,6 +124,7 @@ const reducer = combineReducers({
           ? {
               ...prevValue,
               model: { ...prevValue.model, ...action.payload },
+              hidden: false,
               screenPos: undefined,
             }
           : null
