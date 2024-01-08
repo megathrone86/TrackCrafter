@@ -1,15 +1,15 @@
 import { createUid } from "../helpers/bl-helper";
-import { TrackElementModel } from "../models/ITrackElementModel";
+import { ITrackElementModel } from "../models/ITrackElementModel";
 
 interface FileData {
   version: number;
   createDate: string;
-  items: TrackElementModel[];
+  items: ITrackElementModel[];
 }
 
 //Сервис для импорта и экспорта содержимого редактора
 class ImportExportService {
-  public export(items: TrackElementModel[]) {
+  public export(items: ITrackElementModel[]) {
     const data: FileData = {
       version: 2,
       createDate: new Date().toISOString(),

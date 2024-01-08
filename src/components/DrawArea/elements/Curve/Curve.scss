@@ -1,16 +1,17 @@
-.tc-DrawArea-Line {
+.tc-DrawArea-Curve {
     position: absolute;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 900;
+    z-index: 900;    
+    fill: none;
 
     svg {
         width: 100%;
         height: 100%;
         pointer-events: none;
 
-        .tc-DrawArea-Line-selector {
+        .tc-DrawArea-Curve-selector {
             pointer-events: all;
             stroke: transparent;
         }

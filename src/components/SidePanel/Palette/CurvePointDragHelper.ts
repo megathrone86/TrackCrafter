@@ -2,18 +2,19 @@ import { Dispatch } from "react";
 import { AnyAction } from "redux";
 import { IPoint } from "../../shared/IPoint";
 import {
-  addItem,
   setAddingItem,
+  setAddingItemHidden,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
+  setDragging,
 } from "../../../store/actions";
 import { ITrackElementModel } from "../../../models/ITrackElementModel";
 import { drawAreaClass } from "../../DrawArea/DrawArea";
-import { store } from "../../../store/store";
 import { MouseDragHelper } from "../../../helpers/MouseDragHelper";
 import { GeometryHelper } from "../../DrawArea/GeometryHelper";
+import { store } from "../../../store/store";
 
-export class PaletteDragHelper extends MouseDragHelper {
+export class CurvePointDragHelper extends MouseDragHelper {
   constructor(
     private dispatch: Dispatch<AnyAction>,
     viewportRef: React.MutableRefObject<null>,
@@ -26,6 +27,14 @@ export class PaletteDragHelper extends MouseDragHelper {
   protected getTarget() {
     const elements = document.getElementsByClassName(drawAreaClass);
     return elements[0] as HTMLElement;
+  }
+
+  public handlePointerDown(e: React.PointerEvent) {
+    super.handlePointerDown(e);
+  }
+
+  public onPointerUp(e: PointerEvent) {
+    this.startDragging({ x: e.clientX, y: e.clientY });
   }
 
   protected onDraggingStarted(mousePos: IPoint) {
@@ -41,19 +50,37 @@ export class PaletteDragHelper extends MouseDragHelper {
   }
 
   protected onDraggingInsideTarget(mousePos: IPoint) {
-    const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
-    this.dispatch(setAddingItemMapPosition(worldPos));
+    if (!this.haltIfNeeded()) {
+      console.debug("onDraggingInsideTarget");
+
+      //т.к. камера могла быть перемещена
+      this.geometryHelper.updateState();
+
+      const worldPos = this.geometryHelper.mousePosToWord(mousePos, true);
+      this.dispatch(setAddingItemMapPosition(worldPos));
+    }
   }
 
   protected onDraggingOutsideTarget(mousePos: IPoint) {
-    this.dispatch(setAddingItemScreenPosition(mousePos));
+    if (!this.haltIfNeeded()) {
+      this.haltIfNeeded();
+
+      console.debug("onDraggingOutsideTarget");
+      // this.dispatch(setAddingItemScreenPosition(mousePos));
+      this.dispatch(setAddingItemHidden(true));
+    }
   }
 
-  protected onDraggingFinished() {
+  //костыль для того, чтобы завершить все обработчики жестов, когда пользователь отменил рисование
+  protected haltIfNeeded() {
     const addingItem = store.getState().track.addingItem;
-    if (addingItem && !addingItem.screenPos) {
-      this.dispatch(addItem(addingItem));
+    if (!addingItem) {
+      this.clearAll(null);
+      return true;
     }
-    this.dispatch(setAddingItem(null));
   }
+
+  protected onDraggingFinished() {}
+
+  protected handlePointerUp(e: PointerEvent) {}
 }

@@ -79,6 +79,7 @@ export function MainMenu() {
         const mapElements: IMapBaseItem[] = elements.map((t) => ({
           model: t,
           selected: false,
+          dragging: false,
           uid: createUid(),
         }));
         dispatch(replaceItems(mapElements));

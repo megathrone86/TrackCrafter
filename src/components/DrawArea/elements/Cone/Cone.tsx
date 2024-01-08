@@ -28,6 +28,7 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
   );
 
   const addingItem = useSelector((state: IRootState) => state.track.addingItem);
+  const isAdding = addingItem && props.item === addingItem;
 
   const isSelected = props.item.selected;
 
@@ -35,14 +36,16 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
   const color2 = GetConeColor2(props.item.model.color);
 
   return (
-    <div
-      className="tc-DrawArea-Cone"
-      style={getStyle()}
-      ref={viewportRef}
-      onPointerDown={(e) => dragHelper.handlePointerDown(e)}
-    >
-      <div className="tc-DrawArea-Cone-root">
-        <div className="tc-DrawArea-Cone-circle" style={{ background: color }}>
+    <div className={getClass()} style={getStyle()}>
+      <div
+        className="tc-DrawArea-Cone-root"
+        ref={viewportRef}
+        onPointerDown={(e) => dragHelper.handlePointerDown(e)}
+      >
+        <div
+          className="tc-DrawArea-Cone-circle no-pointer-events"
+          style={{ background: color }}
+        >
           {color2 && (
             <div
               className="tc-DrawArea-Cone-inner-circle"
@@ -51,11 +54,20 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
           )}
         </div>
         {isSelected && (
-          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-circle-selection"></div>
+          <div className="tc-DrawArea-Cone-circle-selection tc-DrawArea-circle-selection no-pointer-events"></div>
         )}
       </div>
     </div>
   );
+
+  function getClass() {
+    const ret = "tc-DrawArea-Cone";
+    if (isAdding) {
+      return `${ret} no-pointer-events`;
+    } else {
+      return ret;
+    }
+  }
 
   function getStyle() {
     let ret = {
@@ -63,16 +75,15 @@ export function Cone(props: ITrackElementProps<IConeModel>) {
       height: `${coneWidth}px`,
     };
 
-    const isScreenPositioned =
-      addingItem?.screenPos && props.item.model === addingItem.model;
-    if (!isScreenPositioned) {
+    const isScreenPositioned = isAdding && addingItem?.screenPos;
+    if (isScreenPositioned) {
+      return ret;
+    } else {
       return {
         ...ret,
         left: geometryHelper.worldXToScreen(props.item.model.x) + "px",
         top: geometryHelper.worldYToScreen(props.item.model.y) + "px",
       };
-    } else {
-      return ret;
     }
   }
 }

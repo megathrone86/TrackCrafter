@@ -36,18 +36,19 @@ export function Line(props: ITrackElementProps<ILineModel>) {
   const points = getPoints();
 
   return (
-    <div className="tc-DrawArea-Line" style={getStyle()} ref={viewportRef}>
-      <svg>
+    <div className="tc-DrawArea-Line" style={getStyle()}>
+      <svg className="no-pointer-events">
         {isSelected && (
           <path
-            className="tc-DrawArea-line-selection"
-            strokeWidth="4"
+            className="tc-DrawArea-line-selection no-pointer-events"
+            strokeWidth="3"
             d={points}
           ></path>
         )}
-        <path strokeWidth="3" d={points}></path>
+        <path className="no-pointer-events" strokeWidth="2" d={points}></path>
         <path
           className="tc-DrawArea-Line-selector"
+          ref={viewportRef}
           strokeWidth="6"
           d={points}
           onPointerDown={(e) => dragHelper.handlePointerDown(e)}

@@ -5,7 +5,7 @@ import {
   current,
 } from "@reduxjs/toolkit";
 
-import { TrackElementModel as ITrackElementModel } from "../models/ITrackElementModel";
+import { ITrackElementModel } from "../models/ITrackElementModel";
 import { gridSizes } from "../consts";
 import { IOption } from "../components/shared/IOption";
 import {
@@ -14,6 +14,7 @@ import {
   moveItems,
   replaceItems,
   setAddingItem,
+  setAddingItemHidden,
   setAddingItemMapPosition,
   setAddingItemScreenPosition,
   setCamPos,
@@ -21,7 +22,7 @@ import {
   setGridSize,
   setSelectedAll,
   setSelection,
-  updateItemField,
+  updateItemModelField,
 } from "./actions";
 import { IPoint } from "../components/shared/IPoint";
 import { trackService } from "../services/TrackService";
@@ -29,6 +30,7 @@ import { trackService } from "../services/TrackService";
 export interface IAddingItem extends IMapItem<ITrackElementModel> {
   screenPos?: IPoint;
   mapPos?: IPoint;
+  hidden?: boolean;
 }
 
 export interface IMapItem<T> {
@@ -37,6 +39,7 @@ export interface IMapItem<T> {
 
   //временные свойства, используемые для работы
   selected: boolean;
+  dragging: boolean;
 }
 
 export interface IMapBaseItem extends IMapItem<ITrackElementModel> {}
@@ -93,18 +96,28 @@ const reducer = combineReducers({
       builder.addCase(moveItems, (prevValue, action) =>
         trackService.moveItems(current(prevValue), action.payload)
       );
-      builder.addCase(updateItemField, (prevValue, action) =>
-        trackService.updateItemField(current(prevValue), action.payload)
+      builder.addCase(updateItemModelField, (prevValue, action) =>
+        trackService.updateModelField(current(prevValue), action.payload)
       );
     }),
     addingItem: createReducer(preloadedState.track.addingItem, (builder) => {
+      builder.addCase(setSelection, (_, action) => null);
       builder.addCase(setAddingItem, (_, action) => action.payload);
       builder.addCase(setAddingItemScreenPosition, (prevValue, action) =>
         prevValue
           ? {
               ...prevValue,
               model: { ...prevValue.model, x: 0, y: 0 },
+              hidden: false,
               screenPos: action.payload,
+            }
+          : null
+      );
+      builder.addCase(setAddingItemHidden, (prevValue, action) =>
+        prevValue
+          ? {
+              ...prevValue,
+              hidden: action.payload,
             }
           : null
       );
@@ -113,6 +126,7 @@ const reducer = combineReducers({
           ? {
               ...prevValue,
               model: { ...prevValue.model, ...action.payload },
+              hidden: false,
               screenPos: undefined,
             }
           : null

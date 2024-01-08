@@ -3,7 +3,7 @@ import "./SelectedItemProperties.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../../store/store";
 import { TrackElementType } from "../../../models/ITrackElementModel";
-import { updateItemField } from "../../../store/actions";
+import { updateItemModelField } from "../../../store/actions";
 import { ReactNode } from "react";
 import { IObject } from "../../../helpers/IObject";
 import { ConeColor, coneColorNames } from "../../../models/IConeModel";
@@ -121,7 +121,7 @@ export function SelectedItemProperties() {
 
   function setProperty(propName: string, propValue: unknown) {
     dispatch(
-      updateItemField({
+      updateItemModelField({
         item,
         propName,
         propValue,

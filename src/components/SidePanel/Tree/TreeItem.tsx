@@ -8,6 +8,7 @@ import { setSelection } from "../../../store/actions";
 import { GetConeColor } from "../../DrawArea/elements/Cone/Cone";
 import { ILineModel } from "../../../models/ILineModel";
 import { GetLineColor } from "../../DrawArea/elements/Line/Line";
+import { ICurveModel, ICurvePointModel } from "../../../models/ICurveModel";
 
 export function TreeItem(props: IBaseTrackElementProps) {
   const dispatch = useDispatch();
@@ -19,8 +20,10 @@ export function TreeItem(props: IBaseTrackElementProps) {
       return getCone(model as IConeModel);
     case TrackElementType.Line:
       return getLine(model as ILineModel);
+    case TrackElementType.Curve:
+      return getCurve(model as ICurveModel);
     default:
-      return <div>Неизвестный элемент ({model.type})</div>;
+      return <div>Unknown type ({model.type})</div>;
   }
 
   function getCone(model: IConeModel) {
@@ -43,6 +46,33 @@ export function TreeItem(props: IBaseTrackElementProps) {
         onClick={handleClick}
       >
         Линия #{model.id}
+      </div>
+    );
+  }
+
+  function getCurve(model: ICurveModel) {
+    return (
+      <div
+        className={"tc-TreeItem " + getClassName()}
+        style={{ color: GetLineColor(model.color) }}
+        onClick={handleClick}
+      >
+        Кривая #{model.id}
+        <div className="tc-TreeItem-children">
+          {model.points.map((point) => getCurvePoint(point))}
+        </div>
+      </div>
+    );
+  }
+
+  function getCurvePoint(model: ICurvePointModel) {
+    return (
+      <div
+        key={model.uid}
+        className={"tc-TreeItem " + getClassName()}
+        onClick={handleClick}
+      >
+        Точка #{model.id}
       </div>
     );
   }

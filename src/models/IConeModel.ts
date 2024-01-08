@@ -1,8 +1,6 @@
-import { createNewItemId, createUid } from "../helpers/bl-helper";
-import {
-  TrackElementModel as ITrackElementModel,
-  TrackElementType,
-} from "./ITrackElementModel";
+import { createId, createUid } from "../helpers/bl-helper";
+import { store } from "../store/store";
+import { ITrackElementModel, TrackElementType } from "./ITrackElementModel";
 
 export enum ConeColor {
   Red = "Red",
@@ -23,7 +21,7 @@ export function createConeModel(color: ConeColor): IConeModel {
     color,
     x: 0,
     y: 0,
-    id: createNewItemId(),
+    id: createId(store.getState().track.items.map((t) => t.model)),
     uid: createUid(),
   };
 }

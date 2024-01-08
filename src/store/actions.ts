@@ -19,6 +19,11 @@ export interface IUpdateItemFieldPayload {
   propValue: unknown;
 }
 
+export interface ISetDraggingPayload {
+  item: IMapBaseItem;
+  dragging: boolean;
+}
+
 export const setCamPos = createAction<ICamPosition>("setCamPos");
 export const setGridSize = createAction<IOption<number>>("setGridSize");
 export const setFileName = createAction<string>("setFileName");
@@ -26,14 +31,17 @@ export const setAddingItem = createAction<IAddingItem | null>("setAddingItem");
 export const setAddingItemScreenPosition = createAction<IPoint>(
   "setAddingItemScreenPosition"
 );
+export const setAddingItemHidden = createAction<boolean>("setAddingItemHidden");
 export const setAddingItemMapPosition = createAction<IPoint>(
   "setAddingItemMapPosition"
 );
 export const addItem = createAction<IMapBaseItem>("addItem");
 export const setSelection = createAction<ISetSelectionPayload>("setSelection");
+export const setDragging = createAction<ISetDraggingPayload>("setDragging");
 export const setSelectedAll = createAction("setSelectedAll");
 export const moveItems = createAction<IMoveItemsPayload[]>("moveItems");
 export const deleteItems = createAction<IMapBaseItem[]>("deleteItems");
 export const replaceItems = createAction<IMapBaseItem[]>("replaceItems");
-export const updateItemField =
-  createAction<IUpdateItemFieldPayload>("updateItemField");
+export const updateItemModelField = createAction<IUpdateItemFieldPayload>(
+  "updateItemModelField"
+);

@@ -1,12 +1,15 @@
 import { IPoint } from "../components/shared/IPoint";
+import { createId, createUid } from "../helpers/bl-helper";
 
 export enum TrackElementType {
   Unknown = "",
   Cone = "Cone",
   Line = "Line",
+  CurvePoint = "CurvePoint",
+  Curve = "Curve",
 }
 
-export interface TrackElementModel extends IPoint {
+export interface ITrackElementModel extends IPoint {
   //тип элемента
   type: TrackElementType;
 
@@ -15,4 +18,11 @@ export interface TrackElementModel extends IPoint {
 
   //уникальный id для внутреннего использования
   uid: string;
+}
+
+export function cloneTrackElementModel(
+  src: ITrackElementModel,
+  items: ITrackElementModel[]
+): ITrackElementModel {
+  return { ...src, uid: createUid(), id: createId(items) };
 }

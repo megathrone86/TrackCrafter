@@ -18,6 +18,7 @@ import { ILineModel, createLineModel } from "../../models/ILineModel";
 import { TrackElementType } from "../../models/ITrackElementModel";
 import { Cone } from "./Palette/objects/Cone/Cone";
 import { SelectedItemProperties } from "./SelectedItemProperties/SelectedItemProperties";
+import { CurvePoint } from "./Palette/objects/CurvePoint/CurvePoint";
 
 const orangeConeModel = createConeModel(ConeColor.Orange);
 const redConeModel = createConeModel(ConeColor.Red);
@@ -65,6 +66,7 @@ export function SidePanel() {
             enabled={canAddLine}
             onClick={handleAddLineClick}
           />
+          <CurvePoint />
         </div>
       </div>
       <div className="tc-SidePanel-componentsPalette">
@@ -82,7 +84,7 @@ export function SidePanel() {
       <div className="tc-SidePanel-tree">
         <p>Дерево объектов</p>
         {items.map((item, i) => (
-          <TreeItem key={i} item={item}></TreeItem>
+          <TreeItem key={item.model.uid} item={item}></TreeItem>
         ))}
       </div>
       <div className="tc-SidePanel-properties">
@@ -141,6 +143,7 @@ export function SidePanel() {
       addItem({
         model: createLineModel(selectedItems[0].model, selectedItems[1].model),
         selected: false,
+        dragging: false,
       })
     );
   }
